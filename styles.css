@@ -1,8 +1,24 @@
+@font-face{
+    font-family: "catmeow";
+    src: url("./fonts/CatMeow-Regular.ttf") format("truetype")
+}
+@font-face{
+    font-family: "KR";
+    src: url("./fonts/KR\ Nick\'s\ Puppy\ 1.ttf") format("truetype")
+}
+@font-face{
+    font-family: "puppybelly";
+    src: url("./fonts/PuppyBellies.ttf") format("truetype")
+}
 :root{
+    --font-family-primary:"catmeow", sans-serif;
+    --font-family-secondary:"KR", sans-serif;
+    --font-family-tertiary:"puppybelly", sans-serif;
     --col-primary:#FECB00;/* used by canine companies*/
     --col-primary-linear-down:linear-gradient(#FECB00 25%,#FFFFFF);
-    --col-primary-linear-up:linear-gradient(180deg,#FFFFFF 25%,#FECB00);
-    --col-primary-body:#FFFFFF;
+    --col-primary-linear-up:linear-gradient(180deg,#FFFFFF 25%,#FECB00 75%);
+    --col-tint:#000000;
+    --col-shade:#FFFFFF;
     --col-secondary:#0077FF;
 }
 *{
@@ -11,8 +27,38 @@
     box-sizing: border-box;
 }
 
+#header > #home-href {
+    width:100%;
+    height:100%;
+    transform:translate(23px,10px);
+    text-decoration:none;
+}
+#header > #home-href > h1{
+    font-family: var(--font-family-tertiary);
+    color:var(--col-tint);
+    padding:1rem;
+
+}
+#hr-main{
+    width:100%;
+    background:var(--col-tint);
+    bordeR:none;
+    height:1.5px;
+    top:120px;
+    position:absolute;
+    z-index:999;
+    animation:grow-hr 1.5s forwards;
+}
+@keyframes grow-hr {
+    from{
+        width:0;
+    }
+    to{
+        width:100%;
+    }
+}
 body{
-    background-color:var(--col-primary-body);
+    background-color:var(--col-shade);
     width:100%;
     height:100%;
 }
@@ -63,7 +109,7 @@ animation: catanimate 2.5s forwards;
     transform: translate(0,0) rotate(0);
     }
     to{
-    transform:translateX(-80px) rotate(-20deg);
+    transform:translate(-50px,15px) rotate(-20deg);
         opacity: 1;
     }
     
@@ -74,7 +120,7 @@ animation: catanimate 2.5s forwards;
     transform: translate(0,0) rotate(0);
     }
     to{
-    transform:translateX(20px) rotate(20deg);
+    transform:translate(20px,-15px) rotate(20deg);
         opacity: 1;
     }
 
