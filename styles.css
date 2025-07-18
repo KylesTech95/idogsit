@@ -353,13 +353,14 @@ padding:.5rem;
 .date-col > label,
 .quantity-col > label,
 .proof-col > label{
+    padding:.5rem;
     overflow: hidden;
     position:relative;
     color:var(--col-shade);
     height:100%;
     width:100%;
     text-align: left;
-    padding:.5rem 0 0 .5rem;
+    /* padding:.5rem 0 0 .5rem; */
     letter-spacing: 1.25px;
     background-color: var(--col-tint);
 }
@@ -428,25 +429,26 @@ font-size:26pt;
 .proof-col > label{
     width:50%;
 }
-.checkbox-container{
+.radio-container{
+    width:50%;
+    display:flex;
+    justify-content: space-evenly;
+    align-items: center;
+    padding:0 .5rem;
+}
+.radio-container>div{
     width:50%;
     display:flex;
     justify-content: space-evenly;
     align-items: center;
 }
-.checkbox-container>div{
-    width:50%;
-    display:flex;
-    justify-content: space-evenly;
-    align-items: center;
-}
-.checkbox-container>div>input{
+.radio-container>div>input{
     transform: scale(1.5); /* Enlarges by 1.5 times */
     /* For older browsers */
-    -webkit-transform: scale(2);
-    -moz-transform: scale(2);
-    -ms-transform: scale(2);
-    -o-transform: scale(2);
+    -webkit-transform: scale(1.5);
+    -moz-transform: scale(1.5);
+    -ms-transform: scale(1.5);
+    -o-transform: scale(1.5);
 }
 
 
@@ -480,7 +482,7 @@ font-size:26pt;
     .proof-col>label{
         width:100%;
     }
-    .checkbox-container{
+    .radio-container{
         width:100%;
         font-size:20pt;
     }
@@ -490,6 +492,11 @@ font-size:26pt;
 
 }
 @media screen and (max-width:500px) {
+
+    .form-title>h1,
+    .radio-container>div>label{
+        font-size: 18pt;
+    }
     @keyframes leftToRight {
     from{
     transform:translate(0,0);
