@@ -14,6 +14,7 @@
     --font-family-primary:"catmeow", sans-serif;
     --font-family-secondary:"KR", sans-serif;
     --font-family-tertiary:"puppybelly", sans-serif;
+    --font-family-regular:"Arial, Helvetica, sans-serif";
     --col-primary:#FECB00;/* used by canine companies*/
     --col-primary-linear-down:linear-gradient(#FECB00 25%,#FFFFFF);
     --col-primary-linear-up:linear-gradient(180deg,#FFFFFF 25%,#FECB00 75%);
@@ -45,7 +46,7 @@
     bordeR:none;
     height:1.5px;
     top:120px;
-    position:absolute;
+    position:fixed;
     z-index:999;
     animation:grow-hr 1.5s forwards;
 }
@@ -81,11 +82,10 @@ top:0;
 }
 #footer{
 background-image:var(--col-primary-linear-up);
-position:absolute;
-bottom:0;
 }
 
 /* paws */
+
 .paw{
     transform:scale(.9);
     position:fixed;
@@ -110,7 +110,7 @@ animation: catanimate 2.5s forwards;
     }
     to{
     transform:translate(-50px,15px) rotate(-20deg);
-        opacity: 1;
+        opacity: .6;
     }
     
 }
@@ -121,7 +121,80 @@ animation: catanimate 2.5s forwards;
     }
     to{
     transform:translate(20px,-15px) rotate(20deg);
-        opacity: 1;
+        opacity: .6;
+    }
+
+}
+
+
+/* section */
+#section-banner{
+    margin-top:120px;
+    width:100%;
+    height:100%;
+    /* border:2px solid red; */
+    overflow:hidden;
+    display:flex;
+    flex-direction: row;
+}
+.col-container{
+    border:2px solid green;
+    width:100%;
+}
+.col-img{
+
+}
+.col-info{
+    position:relative;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: space-between;
+    padding-top:1rem;
+}
+.col-info>p{
+    font-family:var(--font-family-tertiary);
+    /* font-size:var(--font-advertise); */
+    font-size:50pt;
+    text-align: center;
+}
+#cta.cta-first{
+    height:40px;
+    border-top:.5px solid var(--col-tint);
+    width:100%;
+    background:var(--col-secondary);
+    color:var(--col-shade);
+    text-align: center;
+    font-family: var(--font-family-tertiary);
+    letter-spacing:1.5px;
+    text-transform: uppercase;
+    font-size: 16pt;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    transition: .75s;
+}
+#cta.cta-first:hover{
+    background:var(--col-shade);
+    color:var(--col-secondary);
+    transition: .25s;
+    cursor:pointer;
+    box-shadow: inset 0 -5px 9px .9px #333;
+}
+#banner-img{
+    width:100%;
+    height:100%;
+}
+
+
+
+@media screen and (max-width:900px) {
+    .col-info>p{
+        transform:translate(0,0);
+    }
+    #section-banner{
+        flex-direction: column-reverse;
     }
 
 }

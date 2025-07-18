@@ -45,6 +45,14 @@ if(tpe === type){
             console.log(undefined);
     }
 
+    /**----------------------------------------- */
+    // resize factory
+
+    image.resize({h:500,w:750})
+    image.crop({x:100,y:0,h:275,w:500})
+
+
+    /**----------------------------------------- */
     // write image to output
     console.log(outputBin)
     image.write(path.resolve(__dirname,outputBin,filename))
