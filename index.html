@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" id="home-id">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -17,7 +17,7 @@
 
     <!-- header -->
      <header id="header" class="header-main main-header">
-        <a id="home-href" href="/">
+        <a id="home-href" href="#">
             <h1 id="header-title">
             iDogSit <span style="font-family:Arial, Helvetica, sans-serif;font-size:20px;">.com</span>
             </h1>
@@ -26,9 +26,10 @@
         <!-- navigation -->
          <nav id="nav" class="nav-container container-nav">
             <ul id="nav-list-container">
+                <li class="nav-list-item"><a href="#home-id">Home</a></li>
                 <li class="nav-list-item"><a href="#services-id">Services</a></li>
-                <li class="nav-list-item"><a href="#form-id">Book</a></li>
                 <li class="nav-list-item"><a href="#gallery-id">Gallery</a></li>
+                <li class="nav-list-item"><a href="#form-id">Book</a></li>
             </ul>
          </nav>
      </header>
@@ -69,7 +70,32 @@
 
     <!-- form -->
       <form action="/schedule" id="form-id">
-        
+
+        <!-- pick a date -->
+            <div id="date-title" class="form-title">
+                <h1>Pick a Date</h1>
+            </div>
+            
+            <div id="date-container">
+                <div class="date-col">
+                    <label for="startDate">Start Date:</label>
+                    <input type="date" class="date-picker" id="startDate" name="startDate">
+                </div>
+
+                <div class="date-col">
+                    <label for="endDate">End Date:</label>
+                    <input type="date" class="date-picker" id="endDate" name="endDate">
+                </div>
+            </div>
+
+        <!-- number of animals -->
+            <div id="quantity-title" class="form-title">
+            <h1>How Many Pets?</h1>
+            </div>
+            <div id="quantity-container">
+                <input type="number" name="quantity" id="quantity-picker">
+            </div>
+
       </form>
 
 
