@@ -58,16 +58,20 @@ numInput.oninput = e => {
 
 
 
-
 /* ----------------------------------------- */
 // events
 window.onload = () => {
-
+const hr = document.getElementById('hr-main')
     if(isMobileDevice()){
         CURRENT_DEVICE.mobile = true
         CURRENT_DEVICE.desk = false
     }
         setMediaSrc(CURRENT_DEVICE,dogpaw,catpaw)
+
+        // configure hr for header
+        // hr.style.top = document.getElementById('header').getBoundingClientRect().y + "px"
+        hr.style.top = document.getElementById('header').getBoundingClientRect().y + document.getElementById('header').clientHeight
+
 }
 window.onresize = () => {
 

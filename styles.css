@@ -63,8 +63,9 @@ html{
     width:100%;
     background:var(--col-tint);
     bordeR:none;
+    z-index: 999;
     height:1.5px;
-    top:120px;
+    left:0;
     position:fixed;
     animation:grow-hr 1.5s forwards;
 }
@@ -88,7 +89,7 @@ body{
     max-height:175px;
     width:100%;
     left:0;
-    /* border:2px solid red; */
+    /* border:2px solid red;*/
 }
 
 #header{
@@ -141,12 +142,11 @@ background-image:var(--col-primary-linear-up);
 
 .paw{
     pointer-events: none;
-    transform:scale(.9);
     position:fixed;
     right:10px;
     top:10px;
     transform-origin: center;
-    transform: translate(0,0) rotate(0);
+    transform: translate(0,0) rotate(0) scale(.9);;
     opacity: 0;
 }
 #dogpaw{
@@ -164,7 +164,7 @@ animation: catanimate 2.5s forwards;
     }
     to{
     transform:translate(-50px,15px) rotate(-20deg);
-        opacity: .6;
+        opacity: .46;
     }
     
 }
@@ -175,7 +175,7 @@ animation: catanimate 2.5s forwards;
     }
     to{
     transform:translate(20px,-15px) rotate(20deg);
-        opacity: .6;
+        opacity: .46;
     }
 
 }
@@ -368,7 +368,7 @@ padding:.5rem;
 
 #pets-img{
     transform:translate(0,0);
-    width:44px;
+    width:54px;
 }
 .animation-pets-img{
         animation: leftToRight 1.6s forwards alternate infinite;
@@ -381,7 +381,7 @@ padding:.5rem;
 
     }
     to{
-        transform:translate(300px,0) rotate(90deg);
+        transform:translate(420px,0) rotate(90deg);
 
     }
 }
@@ -454,6 +454,7 @@ font-size:26pt;
 
 
 @media screen and (max-width:900px) {
+ 
     .col-info>p{
         font-size:32pt;
         transform:translate(0,0);
@@ -466,9 +467,10 @@ font-size:26pt;
         align-items: start;
         transform:translateX(50px);
     }
-    .nav-list-item{
+    .nav-list-item > a{
         margin-right:.5rem;
         letter-spacing: 1.25px;
+        font-size:16pt;
     }
 
     #date-container{
@@ -486,13 +488,23 @@ font-size:26pt;
         width:100%;
         font-size:20pt;
     }
-    #header{
-        margin-bottom:.5rem;
+
+    @keyframes leftToRight {
+    from{
+    transform:translate(0,0);
+
     }
+    to{
+        transform:translate(200px,0) rotate(90deg);
+
+    }
+}
 
 }
 @media screen and (max-width:500px) {
-
+.paw{
+    width:50px;
+}
     .form-title>h1,
     .radio-container>div>label{
         font-size: 18pt;
@@ -503,9 +515,8 @@ font-size:26pt;
 
     }
     to{
-        transform:translate(100px,0) rotate(90deg);
+        transform:translate(150px,0) rotate(90deg);
 
     }
-    
 }
 }
