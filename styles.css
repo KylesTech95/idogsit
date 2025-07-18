@@ -225,7 +225,10 @@ animation: catanimate 2.5s forwards;
     flex-direction: column;
     justify-content: end;
     position: relative;
-    padding-left:10px;
+    padding:0 1rem;
+}
+.animal-name{
+    color:#f00;
 }
 #cta.cta-first{
     height:40px;
@@ -258,11 +261,25 @@ animation: catanimate 2.5s forwards;
     height:100%;
 }
 
-#cat-img{
+.ani-img{
+    padding:0 .5rem;
     width:50px;
     right:0;
     bottom:-5px;
     position:absolute;
+}
+.oa1{
+    margin-right:72px;
+}
+.oa2{
+    margin-right:48px;
+}
+.oa3{
+    margin-right:24px;
+}
+.oa4{
+    margin-right:0px;
+
 }
 
 
