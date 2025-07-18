@@ -75,16 +75,16 @@
             <div id="date-title" class="form-title">
                 <h1>Pick a Date</h1>
             </div>
-            
-            <div id="date-container">
+
+            <div id="date-container" class="date-container-class">
                 <div class="date-col">
                     <label for="startDate">Start Date:</label>
-                    <input type="date" class="date-picker" id="startDate" name="startDate">
+                    <input type="date" class="date-picker" id="startDate" required name="startDate">
                 </div>
 
                 <div class="date-col">
                     <label for="endDate">End Date:</label>
-                    <input type="date" class="date-picker" id="endDate" name="endDate">
+                    <input type="date" class="date-picker" id="endDate" required name="endDate">
                 </div>
             </div>
 
@@ -92,10 +92,42 @@
             <div id="quantity-title" class="form-title">
             <h1>How Many Pets?</h1>
             </div>
-            <div id="quantity-container">
-                <input type="number" name="quantity" id="quantity-picker">
+                <div id="quantity-container">
+                    <div class="quantity-col">
+                    <label for="quantity"><img src="./media/pets.png" id="pets-img" class="animation-pets-img" alt="pets"></label>
+                    <input type="number" max="12" min="1" required name="quantity" id="quantity-picker" class="noselect" placeholder="Example: 2">
+                </div>
             </div>
 
+        <!-- proof of vaccination -->
+         <div id="proof-title" class="form-title">
+            <h1>Proof of Vaccination</h1>
+            </div>
+
+            <div id="proof-container">
+                <div class="proof-col">
+                    <label for="proof">Status</label>
+                    <div class="checkbox-container">
+                        <!-- yes -->
+                        <div>
+                            <label for="proof">YES</label>
+                            <input type="radio" value="true" name="proof" id="proof-yes"required>
+                        </div>
+                        <!-- no -->
+                        <div>
+                            <label for="proof">NO</label>
+                            <input type="radio" value="false" name="proof" id="proof-no"required>
+                        </div>
+                        <!-- other -->
+                        <div>
+                            <label for="proof">OTHER</label>
+                            <input type="radio" value="other" name="proof" id="proof-other"required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        <input type="submit" id="submit-btn" value="Submit">
       </form>
 
 
