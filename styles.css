@@ -229,6 +229,7 @@ animation: catanimate 2.5s forwards;
 }
 #cta.cta-first{
     height:40px;
+    border-left:2px solid var(--col-tint);
     border-top:.5px solid var(--col-tint);
     /* width:100%; */
     background:var(--col-secondary);
@@ -245,7 +246,7 @@ animation: catanimate 2.5s forwards;
     transition: .75s;
 }
 #cta.cta-first:active,
-#submit-btn{
+#submit-btn:active{
     background:var(--col-shade);
     color:var(--col-secondary);
     transition: .25s;
@@ -266,7 +267,8 @@ animation: catanimate 2.5s forwards;
 
 
 #services-id,#form-id,#gallery-id{
-    height:500px;
+    /* height:500px; */
+    height:100%;
     border-top:2px solid var(--col-tint);
 }
 /* form */
@@ -519,4 +521,23 @@ font-size:26pt;
 
     }
 }
+}
+
+
+/* services */
+#services-id,#gallery-id{
+    /* background:red; */
+    width:100%;
+}
+#services-title,#gallery-title{
+    width:100%;
+}
+#services-title>h1, #gallery-title>h1{
+    width:100%;
+    font-size:40pt;
+    padding:.5rem;
+    text-align: center;
+    font-family: var(--font-family-tertiary);
+    background:var(--col-primary);
+    color:var(--col-tint);
 }
