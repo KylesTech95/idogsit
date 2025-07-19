@@ -81,6 +81,7 @@ body{
     background-color:var(--col-shade);
     width:100%;
     height:100%;
+    /* display:none; */
 }
 
 /* header */
@@ -571,14 +572,18 @@ font-size:26pt;
     flex-direction: column;
     align-items: center;
     justify-items: center;
+    width:100%;
+    height:100%;
 }
 .hr-services{
-width:4px;
+width:.5px;
 z-index:999;
 height:75vh;
 border:none;
-background:red;
+background:var(--col-tint);
 }
 .services-list-item{
     list-style: none;
+    display:none;
 }
+
