@@ -1,4 +1,5 @@
-{"name":"idogsit",
+{
+"name":"idogsit",
 "version":"1.0.0",
 "main":"files",
 "scripts":{"test":"echo \"Error: no test specified\" && exit 1",
@@ -7,7 +8,9 @@
 "serve:quiet":"node server.js --quiet",
 "serve:create":"node lib/createServer.js",
 "server1":"node lib/servers/server1.js",
-"server2":"node lib/servers/server2.js"},
+"server2":"node lib/servers/server2.js",
+"server3":"node lib/servers/server3.js",
+"server4":"node lib/servers/server4.js"},
 "keywords":[],
 "author":"",
 "license":"ISC",
@@ -15,4 +18,5 @@
 "devDependencies":{"body-parser":"^2.2.0",
 "jimp":"^1.6.0",
 "live-serve":"^0.0.0",
-"live-server":"^1.2.2"}}
+"live-server":"^1.2.2"}
+}
