@@ -17,6 +17,7 @@
     --font-family-regular:"Arial, Helvetica, sans-serif";
     --col-primary:#FECB00;/* used by canine companies*/
     --col-primary-linear-down:linear-gradient(#FECB00 25%,#FFFFFF);
+    --col-secondary-linear-down:linear-gradient(#0077FF 25%,#FFFFFF);
     --col-primary-linear-up:linear-gradient(180deg,#FFFFFF 25%,#FECB00 75%);
     --col-tint:#000000;
     --col-shade:#FFFFFF;
@@ -35,6 +36,7 @@
                                   supported by Chrome, Edge, Opera and Firefox */
 }
 
+
 .noselect{
     -webkit-touch-callout: none; /* iOS Safari */
     -webkit-user-select: none; /* Safari */
@@ -52,6 +54,10 @@ html{
     height:100%;
     transform:translate(23px,10px);
     text-decoration:none;
+}
+
+.scroll-header-bg{
+    background-image:var(--col-secondary-linear-down) !important;
 }
 
 #header > #home-href > h1{
@@ -100,7 +106,10 @@ position:fixed;
 top:0;
 display:flex;
 }
-
+.enlarge-list-container{
+    transform:translate(-120px,0);
+    gap:3.25rem;
+}
 /* navigation */
 #nav{
     /* bordeR:2px solid red; */
@@ -481,7 +490,9 @@ font-size:26pt;
 
 
 @media screen and (max-width:900px) {
- 
+ .enlarge-list-container{
+    gap:unset;
+}
     .col-info>p{
         font-size:32pt;
         transform:translate(0,0);

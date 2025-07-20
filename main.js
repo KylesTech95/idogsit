@@ -1,4 +1,5 @@
 const [dogpaw,catpaw] = [...document.getElementById('paw-container').children]
+let navlistitems = document.querySelectorAll('.nav-list-item')
 let [dog,cat] = ['dogpaw.png','catpaw.png']
 let CURRENT_DEVICE = { // current device object with 2 boolean properties
     mobile:false,
@@ -21,9 +22,9 @@ const [start,end] = [document.getElementById('startDate'),document.getElementByI
     // start date
     start.setAttribute('min',nextDay)
     start.oninput = e => {
-        console.log(e.currentTarget.value)
+        // console.log(e.currentTarget.value)
         let startdate = parseDate(e.currentTarget.value)
-        console.log(startdate)
+        // console.log(startdate)
         // end date
         end.setAttribute('min',startdate)
     }
@@ -85,7 +86,22 @@ window.onresize = () => {
 
         setMediaSrc(CURRENT_DEVICE,dogpaw,catpaw)
 }
+window.onscroll = (e) => {
+    const ceiling = document.body.scrollTop;
+    const scrollY = window.scrollY;
 
+    // console.log(scrollY > ceiling)
+    // change bg header
+    if(scrollY > ceiling){
+        document.getElementById('header').classList.add('scroll-header-bg');
+        nav.children[0].classList.add('enlarge-list-container')
+        // navlistitems.forEach(item=>item.classList.add('enlarge-list-item'))
+    }else{
+        document.getElementById('header').classList.remove('scroll-header-bg')
+        nav.children[0].classList.remove('enlarge-list-container')
+        // navlistitems.forEach(item=>item.classList.remove('enlarge-list-item'))
+    }
+}
 
 
 
@@ -97,7 +113,7 @@ function isMobileDevice(){
 
 function targetMediaDir(currentDevice){
     let dir;
-    console.log(currentDevice)
+    // console.log(currentDevice)
     for(let property in currentDevice){
         if(currentDevice[property]){
             dir = `./media/${property}/`
