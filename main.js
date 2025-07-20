@@ -1,36 +1,33 @@
 const [dogpaw,catpaw] = [...document.getElementById('paw-container').children]
-let navlistitems = document.querySelectorAll('.nav-list-item')
+const navlistitems = document.querySelectorAll('.nav-list-item')
+let com = document.getElementById('com')
 let [dog,cat] = ['dogpaw.png','catpaw.png']
+let animals = ['dog-run','puppy','dog-play'];
 let CURRENT_DEVICE = { // current device object with 2 boolean properties
     mobile:false,
     desk:true
 }
 let mediaDirectory
 
-
-
-
+switchBanner(document.getElementById('banner-img'),animals,8)
 /* ----------------------------------------- */
 // form section
-
 // pick a date
 const currentDate = parseDate(new Date().toLocaleDateString())
 let [month,day,year] = currentDate.split('-');
 let nextDay = `${year}-${String(month<10?`0${month}`:month)}-${Number(day<10?`0${day}`:day)+1}`
 
 const [start,end] = [document.getElementById('startDate'),document.getElementById('endDate')]
-    // start date
-    start.setAttribute('min',nextDay)
-    start.oninput = e => {
-        // console.log(e.currentTarget.value)
-        let startdate = parseDate(e.currentTarget.value)
-        // console.log(startdate)
-        // end date
-        end.setAttribute('min',startdate)
-    }
+// start date
+start.setAttribute('min',nextDay)
+start.oninput = e => {
+    // console.log(e.currentTarget.value)
+    let startdate = parseDate(e.currentTarget.value)
+    // console.log(startdate)
+    // end date
+    end.setAttribute('min',startdate)
+}
    
-
-
 // number of pets
 const numInput = document.getElementById('quantity-picker');
 const petimg = document.getElementById('pets-img')
@@ -55,9 +52,6 @@ numInput.oninput = e => {
 
 
 }
-
-
-
 
 /* ----------------------------------------- */
 // events
@@ -96,14 +90,15 @@ window.onscroll = (e) => {
         document.getElementById('header').classList.add('scroll-header-bg');
         nav.children[0].classList.add('enlarge-list-container')
         // navlistitems.forEach(item=>item.classList.add('enlarge-list-item'))
+        com.classList.add('com-yellow')
     }else{
         document.getElementById('header').classList.remove('scroll-header-bg')
         nav.children[0].classList.remove('enlarge-list-container')
+        
         // navlistitems.forEach(item=>item.classList.remove('enlarge-list-item'))
+        com.classList.remove('com-yellow')
     }
 }
-
-
 
 /* ----------------------------------------- */
 // check if mobile device
@@ -132,4 +127,14 @@ function setMediaSrc(currentDevice,dogpaw,catpaw){
 function parseDate(date){
     let parsed = date.replace(/\//g,'-')
     return parsed
+}
+
+// switch banner fn
+function switchBanner(banner,images,seconds){
+    images.forEach((img,idx)=>{
+        setInterval(()=>{
+        banner.src = `./media/${img}.png`
+    },(seconds*1000)*((idx+1)))
+    })
+    
 }

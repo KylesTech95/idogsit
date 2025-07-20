@@ -98,6 +98,11 @@ body{
     left:0;
     /* border:2px solid red;*/
 }
+.com-yellow{
+    color: var(--col-primary) !important;
+    text-shadow: .15px .15px 3px #000;
+}
+
 
 #header{
 z-index: 996;
@@ -214,6 +219,7 @@ animation: catanimate 2.5s forwards;
     padding-top:1rem;
 }
 .col-info>p{
+    margin-top:2.75rem;
     font-family:var(--font-family-tertiary);
     /* font-size:var(--font-advertise); */
     font-size:50pt;
@@ -495,6 +501,7 @@ font-size:26pt;
 }
     .col-info>p{
         font-size:32pt;
+        margin:0;
         transform:translate(0,0);
     }
     #section-banner{
