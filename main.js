@@ -11,7 +11,6 @@ let CURRENT_DEVICE = { // current device object with 2 boolean properties
     desk:true
 }
 let mediaDirectory
-
 switchBanner(document.getElementById('banner-img'),animals,8)
 /* ----------------------------------------- */
 // form section
@@ -45,9 +44,9 @@ numInput.oninput = e => {
     petimg.classList.remove('animation-pets-img');
     
     // if number is over 12
-    if(+e.currentTarget.value > 12){
-        e.currentTarget.value = 12
-    }
+    if(+e.currentTarget.value > max){
+        e.currentTarget.value = max
+    } 
     // if number is under 1
     if(/((0[0-9])|-)/.test(e.currentTarget.value)){
         e.currentTarget.value = 0
@@ -70,21 +69,8 @@ const hr = document.getElementById('hr-main')
         // hr.style.top = document.getElementById('header').getBoundingClientRect().y + "px"
         hr.style.top = document.getElementById('header').getBoundingClientRect().y + document.getElementById('header').clientHeight
 
-        // what we do (services)
-    // console.log(servicesListItems)
-    const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
-    for(let i = 0; i < servicesListItems.length; i++){
-        if(i%2==0){
-            servicesListItems[i].style.left = left+'px';
-            servicesListItems[i].style.top = 25*(i+1)+'px';
-        } else {
-            servicesListItems[i].style.left = right + 'px';
-            servicesListItems[i].style.top = 25*(i+1)+'px';
-        }
-        
-        
-        
-    }
+        document.body.clientWidth > 900 ? createServicesColumns(hr_services,servicesListItems,true) : createServicesColumns(hr_services,servicesListItems,false);
+
 }
 window.onresize = () => {
 
@@ -98,19 +84,8 @@ window.onresize = () => {
 
         setMediaSrc(CURRENT_DEVICE,dogpaw,catpaw)
 
-        // what we do (services)
-        // console.log(servicesListItems)
-        const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
-        for(let i = 0; i < servicesListItems.length; i++){
-            if(i%2==0){
-                servicesListItems[i].style.left = left+'px';
-                servicesListItems[i].style.top = 25*(i+1)+'px';
-            } else {
-                servicesListItems[i].style.left = right + 'px';
-                servicesListItems[i].style.top = 25*(i+1)+'px';
-            }
-            
-        }
+                document.body.clientWidth > 900 ? createServicesColumns(hr_services,servicesListItems,true) : createServicesColumns(hr_services,servicesListItems,false);
+
 }
 window.onscroll = (e) => {
     const ceiling = document.body.scrollTop;
@@ -129,20 +104,6 @@ window.onscroll = (e) => {
         
         // navlistitems.forEach(item=>item.classList.remove('enlarge-list-item'))
         com.classList.remove('com-yellow')
-    }
-
-    // what we do (services)
-    // console.log(servicesListItems)
-    const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
-    for(let i = 0; i < servicesListItems.length; i++){
-        if(i%2==0){
-            servicesListItems[i].style.left = left+'px';
-            servicesListItems[i].style.top = 25*(i+1)+'px';
-        } else {
-            servicesListItems[i].style.left = right + 'px';
-            servicesListItems[i].style.top = 25*(i+1)+'px';
-        }
-        
     }
 }
 
@@ -183,4 +144,36 @@ function switchBanner(banner,images,seconds){
     },(seconds*1000)*((idx+1)))
     })
     
+}
+
+function adjustContainerHeight(container,lastItem){
+    let padding = 10;
+    let yPos = lastItem.getBoundingClientRect().y + padding;
+    container.style.height = (yPos) + 'px';
+    return;
+}
+
+function createServicesColumns(hr_services,servicesListItems,bool){
+    // what we do (services)
+     if(bool==true){
+        // console.log(servicesListItems)
+        const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
+        for(let i = 0; i < servicesListItems.length; i++){
+            servicesListItems[i].classList.add('absolute')
+            if(i%2==0){
+                servicesListItems[i].style.left = left+'px';
+                servicesListItems[i].style.top = 25*(i+1)+'px';
+            } else {
+                servicesListItems[i].style.left = right + 'px';
+                servicesListItems[i].style.top = 25*(i+1)+'px';
+            }
+            
+        }
+     } 
+
+     if(bool==false){
+        for(let i = 0; i < servicesListItems.length; i++){
+            servicesListItems[i].classList.remove('absolute')
+        }
+     }
 }

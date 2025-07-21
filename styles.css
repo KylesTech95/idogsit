@@ -46,6 +46,9 @@
             user-select: none; /* Non-prefixed version, currently
                                   supported by Chrome, Edge, Opera and Firefox */
 }
+.absolute{
+    position: absolute;
+}
 html{
     scroll-behavior: smooth;
 }
@@ -496,6 +499,59 @@ font-size:26pt;
 
 
 
+/* services */
+#services-id,#gallery-id{
+    /* background:red; */
+    width:100%;
+}
+#services-title,#gallery-title{
+    width:100%;
+}
+#services-title>h1, #gallery-title>h1{
+    width:100%;
+    font-size:40pt;
+    padding:.5rem;
+    text-align: center;
+    font-family: var(--font-family-tertiary);
+    background:var(--col-primary);
+    color:var(--col-tint);
+}
+
+.services-container{
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-items: center;
+    width:100%;
+    height:100%;
+}
+.hr-services{
+width:.5px;
+height:200px;
+border:none;
+background:var(--col-tint);
+}
+.services-list-item{
+    list-style: none;
+    border:.5px solid #333;
+    width:300px;
+    padding:1rem;
+    font-family: var(--font-family-tertiary);
+    font-size: 14pt;
+}
+#services-list-container{
+    position:relative;
+    /* border: 2px solid #ff0000; */
+    width:100%;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content:center;
+}
+
+
+
+/* media queries */
 @media screen and (max-width:900px) {
  .enlarge-list-container{
     gap:unset;
@@ -535,6 +591,20 @@ font-size:26pt;
         font-size:20pt;
     }
 
+    #services-list-container{
+        display:flex;
+        flex-direction:column;
+        height:100%;
+        min-height:200px;
+        gap:1rem;
+    }
+    .hr-services{
+        display:none;
+    }
+    .services-list-item{
+        width:100%;
+    }   
+
     @keyframes leftToRight {
     from{
     transform:translate(0,0);
@@ -565,56 +635,4 @@ font-size:26pt;
 
     }
 }
-}
-
-
-/* services */
-#services-id,#gallery-id{
-    /* background:red; */
-    width:100%;
-}
-#services-title,#gallery-title{
-    width:100%;
-}
-#services-title>h1, #gallery-title>h1{
-    width:100%;
-    font-size:40pt;
-    padding:.5rem;
-    text-align: center;
-    font-family: var(--font-family-tertiary);
-    background:var(--col-primary);
-    color:var(--col-tint);
-}
-
-.services-container{
-    display:flex;
-    flex-direction: column;
-    align-items: center;
-    justify-items: center;
-    width:100%;
-    height:100%;
-}
-.hr-services{
-width:.5px;
-z-index:999;
-height:75vh;
-border:none;
-background:var(--col-tint);
-}
-.services-list-item{
-    list-style: none;
-    position:absolute;
-    border:.5px solid #333;
-    /* width:100%; */
-    padding:1rem;
-    font-family: var(--font-family-tertiary);
-}
-#services-list-container{
-    position:relative;
-    /* border: 2px solid #ff0000; */
-    width:100%;
-    display: flex;
-    flex-direction: column;
-    align-items: center;
-    justify-content:center;
 }
