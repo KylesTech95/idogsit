@@ -3,6 +3,9 @@ const navlistitems = document.querySelectorAll('.nav-list-item')
 let com = document.getElementById('com')
 let [dog,cat] = ['dogpaw.png','catpaw.png']
 let animals = ['dog-run','puppy','dog-play'];
+const servicesListContainer = document.getElementById('services-list-container');
+const servicesListItems = [...servicesListContainer.children].filter((x,y)=>x.tagName === 'LI');
+const hr_services = document.querySelector('.hr-services')
 let CURRENT_DEVICE = { // current device object with 2 boolean properties
     mobile:false,
     desk:true
@@ -67,6 +70,21 @@ const hr = document.getElementById('hr-main')
         // hr.style.top = document.getElementById('header').getBoundingClientRect().y + "px"
         hr.style.top = document.getElementById('header').getBoundingClientRect().y + document.getElementById('header').clientHeight
 
+        // what we do (services)
+    // console.log(servicesListItems)
+    const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
+    for(let i = 0; i < servicesListItems.length; i++){
+        if(i%2==0){
+            servicesListItems[i].style.left = left+'px';
+            servicesListItems[i].style.top = 25*(i+1)+'px';
+        } else {
+            servicesListItems[i].style.left = right + 'px';
+            servicesListItems[i].style.top = 25*(i+1)+'px';
+        }
+        
+        
+        
+    }
 }
 window.onresize = () => {
 
@@ -79,6 +97,20 @@ window.onresize = () => {
     }
 
         setMediaSrc(CURRENT_DEVICE,dogpaw,catpaw)
+
+        // what we do (services)
+        // console.log(servicesListItems)
+        const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
+        for(let i = 0; i < servicesListItems.length; i++){
+            if(i%2==0){
+                servicesListItems[i].style.left = left+'px';
+                servicesListItems[i].style.top = 25*(i+1)+'px';
+            } else {
+                servicesListItems[i].style.left = right + 'px';
+                servicesListItems[i].style.top = 25*(i+1)+'px';
+            }
+            
+        }
 }
 window.onscroll = (e) => {
     const ceiling = document.body.scrollTop;
@@ -100,10 +132,6 @@ window.onscroll = (e) => {
     }
 
     // what we do (services)
-    const servicesListContainer = document.getElementById('services-list-container');
-    const servicesListItems = [...servicesListContainer.children].filter((x,y)=>x.tagName === 'LI');
-    const hr_services = document.querySelector('.hr-services')
-    
     // console.log(servicesListItems)
     const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
     for(let i = 0; i < servicesListItems.length; i++){
