@@ -98,6 +98,24 @@ window.onscroll = (e) => {
         // navlistitems.forEach(item=>item.classList.remove('enlarge-list-item'))
         com.classList.remove('com-yellow')
     }
+
+    // what we do (services)
+    const servicesListContainer = document.getElementById('services-list-container');
+    const servicesListItems = [...servicesListContainer.children].filter((x,y)=>x.tagName === 'LI');
+    const hr_services = document.querySelector('.hr-services')
+    
+    // console.log(servicesListItems)
+    const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
+    for(let i = 0; i < servicesListItems.length; i++){
+        if(i%2==0){
+            servicesListItems[i].style.left = left+'px';
+            servicesListItems[i].style.top = 25*(i+1)+'px';
+        } else {
+            servicesListItems[i].style.left = right + 'px';
+            servicesListItems[i].style.top = 25*(i+1)+'px';
+        }
+        
+    }
 }
 
 /* ----------------------------------------- */
