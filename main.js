@@ -5,7 +5,8 @@ let [dog,cat] = ['dogpaw.png','catpaw.png']
 let animals = ['dog-run','puppy','dog-play'];
 const servicesListContainer = document.getElementById('services-list-container');
 const servicesListItems = [...servicesListContainer.children].filter((x,y)=>x.tagName === 'LI');
-const hr_services = document.querySelector('.hr-services')
+const hr_services = document.querySelector('.hr-services');
+const service_images = ['behavior','bowl','monitor','treatment','waste']
 let CURRENT_DEVICE = { // current device object with 2 boolean properties
     mobile:false,
     desk:true
@@ -69,8 +70,22 @@ const hr = document.getElementById('hr-main')
         // hr.style.top = document.getElementById('header').getBoundingClientRect().y + "px"
         hr.style.top = document.getElementById('header').getBoundingClientRect().y + document.getElementById('header').clientHeight
 
+        // configure services container
         document.body.clientWidth > 900 ? createServicesColumns(hr_services,servicesListItems,true) : createServicesColumns(hr_services,servicesListItems,false);
+        
+        servicesListItems.map((item,index) => {
+            // console.log(item);
+            const img = new Image();
+            const path = './media/services/', ext = '.png'
+            img.src = path + service_images[index] + ext;
+            img.classList.add('services-img')
 
+            // append image to li
+            // servicesListContainer.appendChild(img)
+            item.insertBefore(img,item.children[0])
+        })
+
+    
 }
 window.onresize = () => {
 
@@ -159,14 +174,7 @@ function createServicesColumns(hr_services,servicesListItems,bool){
         // console.log(servicesListItems)
         const [left,right] = [5, hr_services.getBoundingClientRect().x+5];
         for(let i = 0; i < servicesListItems.length; i++){
-            servicesListItems[i].classList.add('absolute')
-            if(i%2==0){
-                servicesListItems[i].style.left = left+'px';
-                servicesListItems[i].style.top = 25*(i+1)+'px';
-            } else {
-                servicesListItems[i].style.left = right + 'px';
-                servicesListItems[i].style.top = 25*(i+1)+'px';
-            }
+            
             
         }
      } 
