@@ -31,3 +31,32 @@ window.onscroll = (e) => {
         com.classList.remove('com-yellow')
     }
 }
+
+
+function updateNavigator(name,action){
+    let id;
+    const navitems = [...document.querySelectorAll('.nav-list-item')];
+    let item = navitems.find(n=>{
+        n = n.children[0].textContent // a element
+        console.log(n)
+        return new RegExp(name,'i').test(n) || name === n || name === n.toLowerCase();
+    }) // find item
+        // console.log(item)
+        id = document.getElementById(`${item.textContent.toLowerCase()}-id`) && document.getElementById(`${item.textContent.toLowerCase()}-id`) // access the id of each section by it's item_name
+
+
+        console.log(id,item)
+    
+        return action=='disable' ? disableItem(item,id) : null
+
+function disableItem(item,id){
+    // method
+    item.style.display = 'none';
+    id ? id.style.display = 'none' : null;
+    return
+
+}
+
+
+}
+updateNavigator('gallery','disable')

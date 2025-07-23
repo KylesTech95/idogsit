@@ -206,10 +206,6 @@ function createServicesColumns(hr_services,servicesListItems,bool){
      }
 }
 
-async function postFetch(url,data){
-//    return await fetch(url, {method:'POST',headers:{"Content-Type":"Application/json"},body:JSON.stringify(data)})
-   return await fetch(url, {headers:{'Content-Type':'Application/json'},method:'POST',body:JSON.stringify(data)})
-}
 
 function updateNavigator(name,action){
     let id;
@@ -237,9 +233,11 @@ function disableItem(item,id){
 
 
 }
-
-
-
+let allinputs = [...document.querySelectorAll('input')]//.filter(x=>x.id!==startDate.id && x.id!==numInput.id);
+let formTimer;
+function clearInputs(){
+    return allinputs.map(x=>x.value = '');
+}
 
 
 

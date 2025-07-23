@@ -47,5 +47,5 @@ app.route('/book/submission').get((req,res)=>{
 
 // listen
 app.listen(port,()=>{
-    console.log("Listening on port " + port)
+    console.log("Server is running...")
 })

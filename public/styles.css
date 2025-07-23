@@ -570,6 +570,7 @@ background:var(--col-tint);
     justify-content:center;
     overflow:hidden;
     padding: 1rem 0;
+    box-shadow:0 .25rem 8px .9px #333;
 
 }
 #services-list-container{
@@ -583,11 +584,14 @@ background:var(--col-tint);
     flex-wrap:wrap;
     align-items: center;
     justify-content:center;
+    padding:1rem 0;
 }
 
 .services-img{
     pointer-events: none;
-    width:150px;
+    width:250px;
+    min-height:200px;
+    max-height:200px;
     /* position: absolute; */
     /* bottom:0; */
 }
