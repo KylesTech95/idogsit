@@ -206,6 +206,9 @@ function createServicesColumns(hr_services,servicesListItems,bool){
      }
 }
 
+async function postFetch(url,data){
+   return await fetch(url, {headers:{'Content-Type':'Application/json'},method:'POST',body:JSON.stringify(data)})
+}
 
 function updateNavigator(name,action){
     let id;
