@@ -1,18 +1,28 @@
 {
-"name":"idogsit",
-"version":"1.0.0",
-"main":"files",
-"scripts":{"test":"echo \"Error: no test specified\" && exit 1",
-"convert-img":"node files/convert.js",
-"serve":"node server.js",
-"serve:quiet":"node server.js --quiet",
-"serve:create":"node lib/createServer.js",
-"server1":"node lib/servers/server1.js"},
-"keywords":[],
-"author":"",
-"license":"ISC",
-"description":"",
-"devDependencies":{"body-parser":"^2.2.0",
-"jimp":"^1.6.0",
-"live-server":"^1.2.2"}
+  "name": "idogsit",
+  "version": "1.0.0",
+  "main": "server",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "nodemon server/app.js",
+    "convert-img": "node files/convert.js",
+    "serve": "node server.js",
+    "serve:quiet": "node server.js --quiet",
+    "serve:create": "node lib/createServer.js",
+    "server1": "node lib/servers/server1.js"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "description": "",
+  "devDependencies": {
+    "body-parser": "^2.2.0",
+    "cors": "^2.8.5",
+    "crypto": "^1.0.1",
+    "dotenv": "^17.2.0",
+    "express": "^5.1.0",
+    "jimp": "^1.6.0",
+    "live-server": "^1.2.2",
+    "nodemon": "^3.1.10"
+  }
 }

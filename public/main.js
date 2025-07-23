@@ -1,5 +1,6 @@
 const [dogpaw,catpaw] = [...document.getElementById('paw-container').children]
 const navlistitems = document.querySelectorAll('.nav-list-item')
+const form = document.getElementById('book-id')
 let com = document.getElementById('com')
 let [dog,cat] = ['dogpaw.png','catpaw.png']
 let animals = ['dog-run','puppy','dog-play'];
@@ -122,6 +123,25 @@ window.onscroll = (e) => {
     }
 }
 
+// submit form
+let radios = [...document.querySelectorAll('input')].filter(y=>y.type==='radio')
+const payload = {startDate:undefined,endDate:undefined,quantity:undefined,proof_of_vaccination:undefined}
+form.onsubmit = e => {
+    e.preventDefault();
+    let currentCheckedRadio = radios.find(r=>r.checked)
+    // console.log(currentCheckedRadio.value)
+    // postFetch('/book/submission',{data:[...document.querySelectorAll('input')].map(v=>v.value)})
+    let values = [...document.querySelectorAll('input')].filter(y=>!/(radio|submit)/ig.test(y.type)).map(v=>v.value).concat(currentCheckedRadio.value);
+    payload.startDate = values[0]
+    payload.endDate = values[1]
+    payload.quantity = values[2]
+    payload.proof_of_vaccination = values[3]
+
+    postFetch('/book',payload)
+    setTimeout(()=>{
+        window.location.href = window.location.origin + "/book/submission"
+    },1000)
+}
 /* ----------------------------------------- */
 // check if mobile device
 function isMobileDevice(){
@@ -176,7 +196,7 @@ function createServicesColumns(hr_services,servicesListItems,bool){
         for(let i = 0; i < servicesListItems.length; i++){
             
             
-        }
+        } 
      } 
 
      if(bool==false){
@@ -185,3 +205,50 @@ function createServicesColumns(hr_services,servicesListItems,bool){
         }
      }
 }
+
+async function postFetch(url,data){
+//    return await fetch(url, {method:'POST',headers:{"Content-Type":"Application/json"},body:JSON.stringify(data)})
+   return await fetch(url, {headers:{'Content-Type':'Application/json'},method:'POST',body:JSON.stringify(data)})
+}
+
+function updateNavigator(name,action){
+    let id;
+    const navitems = [...document.querySelectorAll('.nav-list-item')];
+    let item = navitems.find(n=>{
+        n = n.children[0].textContent // a element
+        console.log(n)
+        return new RegExp(name,'i').test(n) || name === n || name === n.toLowerCase();
+    }) // find item
+        // console.log(item)
+        id = document.getElementById(`${item.textContent.toLowerCase()}-id`) // access the id of each section by it's item_name
+
+
+        console.log(id,item)
+    
+        return action=='disable' ? disableItem(item,id) : null
+
+function disableItem(item,id){
+    // method
+    item.style.display = 'none';
+    id.style.display = 'none';
+    return
+
+}
+
+
+}
+
+
+
+
+
+
+
+// navigation
+/*------------------------------------------------------------------- */
+updateNavigator('gallery','disable')
+// updateNavigator('services','disable')
+// updateNavigator('home','disable')
+// updateNavigator('book','disable')
+
+
