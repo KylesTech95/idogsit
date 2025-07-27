@@ -1,7 +1,7 @@
 require('dotenv').config()
 const express = require('express')
 const app = express()
-const port = process.env.PORT|3033
+const port = process.env.PORT||3033
 const cors = require('cors')
 const {pool} = require('./lib/db.js')
 
@@ -52,5 +52,5 @@ app.route('/book/submission').get((req,res)=>{
 
 // listen
 app.listen(port,()=>{
-    console.log("Server is running...")
+    console.log("Server is running on port " + port)
 })

@@ -1,5 +1,5 @@
 require('dotenv').config()
-const mysql = require('mysql2');
+const mysql = require('mysql2/promise');
 
 const pool = mysql.createPool({
     host:process.env.MYSQL_H,
@@ -9,4 +9,10 @@ const pool = mysql.createPool({
     port:process.env.MYSQL_PO
 })
 
-module.exports = {pool}
+const exitProcess = (code) => require('process').exit(code);
+const testConnection = async pool => {try { console.log([...await pool.query('select * from pets')][0]); exitProcess(0) } catch (err) { throw new Error(err); }
+}
+// testConnection(pool)
+module.exports = {pool, testConnection}
+
+
