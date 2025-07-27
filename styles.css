@@ -447,6 +447,7 @@ label{
     outline:none;
     height:80px;
     width:100%;
+    padding-left:.5rem;
     /* border:2px solid red; */
     /* min-height:80px; */
 }
@@ -651,7 +652,10 @@ background:var(--col-tint);
         width:100%;
     }   
 
-
+    .services-list-item{
+        max-width:100%;
+        min-width:100%;
+    }
     @keyframes leftToRight {
     from{
     transform:translate(0,0);
