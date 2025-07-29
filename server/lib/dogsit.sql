@@ -24,11 +24,15 @@ DROP TABLE IF EXISTS `bookings`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings` (
   `bid` bigint unsigned NOT NULL AUTO_INCREMENT,
-  `pid` int NOT NULL,
-  `animal_id` int NOT NULL,
+  `pid` bigint unsigned DEFAULT NULL,
+  `oid` bigint unsigned DEFAULT NULL,
   PRIMARY KEY (`bid`),
-  UNIQUE KEY `bid` (`bid`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  UNIQUE KEY `bid` (`bid`),
+  KEY `pid` (`pid`),
+  KEY `oid` (`oid`),
+  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `pets` (`pid`),
+  CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`oid`) REFERENCES `owners` (`oid`)
+) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -37,6 +41,7 @@ CREATE TABLE `bookings` (
 
 LOCK TABLES `bookings` WRITE;
 /*!40000 ALTER TABLE `bookings` DISABLE KEYS */;
+INSERT INTO `bookings` VALUES (1,2,1),(4,1,1);
 /*!40000 ALTER TABLE `bookings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -81,7 +86,6 @@ CREATE TABLE `pets` (
   `weight` float DEFAULT NULL,
   `height` float DEFAULT NULL,
   `breed` varchar(50) NOT NULL,
-  `oid` int DEFAULT NULL,
   PRIMARY KEY (`pid`),
   UNIQUE KEY `animal_id` (`pid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
@@ -93,7 +97,7 @@ CREATE TABLE `pets` (
 
 LOCK TABLES `pets` WRITE;
 /*!40000 ALTER TABLE `pets` DISABLE KEYS */;
-INSERT INTO `pets` VALUES (1,'jax',8,90.4,15.5,'hound',NULL),(2,'Saul',12,40.4,10.5,'Boxer',NULL);
+INSERT INTO `pets` VALUES (1,'jax',8,90.4,15.5,'hound'),(2,'Saul',12,40.4,10.5,'Boxer');
 /*!40000 ALTER TABLE `pets` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -106,4 +110,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-07-27  0:14:01
+-- Dump completed on 2025-07-29 14:17:17
