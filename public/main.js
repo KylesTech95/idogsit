@@ -3,11 +3,65 @@ const navlistitems = document.querySelectorAll('.nav-list-item')
 const form = document.getElementById('book-id')
 let com = document.getElementById('com')
 let [dog,cat] = ['dogpaw.png','catpaw.png']
+let petinfoContainer = document.getElementById('pet-info-container')
 let animals = ['dog-run','puppy','dog-play'];
 const servicesListContainer = document.getElementById('services-list-container');
 const servicesListItems = [...servicesListContainer.children].filter((x,y)=>x.tagName === 'LI');
 const hr_services = document.querySelector('.hr-services');
 const service_images = ['behavior','bowl','monitor','treatment','waste']
+const petinfoCol = `<div class="petinfo-col">
+                    <div id="pettype-col">
+                        <ul class="breed-ul"></ul>
+                        <label for="pettype">Type</label>
+                        <select name="pettype" id="select-type-input">
+                            <option value="0">Dog</option>
+                            <option value="1">Cat</option>
+                            <option value="2">Rabbit</option>
+                            <option value="3">Turtle</option>
+                            <option value="4">Snake</option>
+                        </select>
+                        <label for="breed">Breed/Species</label>
+                        <input type="text" name="breed" id="breed-input" placeholder="Breed/Species">
+                    </div>
+                    <div>
+                        <label for="petname">Name</label>
+                        <input type="text" name="petname" id="petname-input" class="noselect" placeholder="Name">
+                    </div>
+                    <!-- pet age  -->
+                    <div>
+                        <label for="petage">Age</label>
+                        <input type="number" min="" name="petage" id="petage-input" class="noselect" placeholder="Age">
+                        <select name="select-input-element" id="select-input-element">
+                            <option value="0">Years</option>
+                            <option value="1">Months</option>
+                            <option value="2">Weeks</option>
+                        </select>
+                        <div id="petsize-container">
+                            <img id="current-size" class="size-current size ">
+                        </div>
+                    </div>
+
+                    <!-- pet height and weight -->
+                    <div>
+                        <!-- height -->
+                        <label for="petheight">Height</label>
+                        <input type="text" name="" id="">
+                        <select name="select-input-element2" id="select-input-element2">
+                            <option value="0">cm</option>
+                            <option value="1">in</option>
+                        </select>
+
+                        <!-- weight -->
+                         <label for="petweight">Weight</label>
+                        <input type="text" name="" id="">
+                        <select name="select-input-element3" id="select-input-element3">
+                            <option value="0">lbs</option>
+                            <option value="1">kg</option>
+                        </select>
+
+                    </div>
+                    
+                </div>`
 let CURRENT_DEVICE = { // current device object with 2 boolean properties
     mobile:false,
     desk:true
@@ -36,6 +90,9 @@ start.oninput = e => {
 const numInput = document.getElementById('quantity-picker');
 const petimg = document.getElementById('pets-img')
 numInput.oninput = e => {
+    if([...petinfoContainer.children].length > 0){
+        [...petinfoContainer.children].map(ch => ch.remove());
+    }
     let max = 12;
     while(!e.currentTarget.value){
         if(!petimg.classList.contains('animation-pets-img')){
@@ -51,9 +108,18 @@ numInput.oninput = e => {
     } 
     // if number is under 1
     if(/((0[0-9])|-)/.test(e.currentTarget.value)){
-        e.currentTarget.value = 0
+        e.currentTarget.value = 0;
     }
 
+    let targetNum = +e.currentTarget.value;
+    // append pet info cols
+    for(let i = 0; i < targetNum; i++){
+        const parser = new DOMParser();
+        const element = parser.parseFromString(petinfoCol,'text/html');
+        const petElement = element.children[0].children[1].children[0]
+
+        petinfoContainer.appendChild(petElement)
+    }
 
 }
 
@@ -257,36 +323,40 @@ updateNavigator('gallery','disable')
 
 
 // pet age -> icon/size
-const selectEelement = document.getElementById('select-input-element')
-const options = [...selectEelement.children];
-const [years,months,weeks] = [...options].map(( x, index) => +x.value === index ? {value:x.value,content:x.textContent} : null);
+window.onchange = async() => {
+    if(petinfoContainer.children.length > 0){
+    const selectEelement = document.getElementById('select-input-element')
+    const options = [...selectEelement.children];
+    const [years,months,weeks] = [...options].map(( x, index) => +x.value === index ? {value:x.value,content:x.textContent} : null);
 
-// console.log(years,months,weeks) // formatted times
-const currentSize = document.getElementById('current-size');
+    // console.log(years,months,weeks) // formatted times
+    const currentSize = document.getElementById('current-size');
 
-// select the value onchange event
-selectEelement.onchange = e => {
-    const value = e.currentTarget.value;
-    // console.log(value)
-    ageVal  = [years,months,weeks][value]
-    // console.log(ageVal)
+    // select the value onchange event
+    selectEelement.onchange = e => {
+        const value = e.currentTarget.value;
+        // console.log(value)
+        ageVal  = [years,months,weeks][value]
+        // console.log(ageVal)
+    }
+
+    // select animal type [cat,rabbit,dog,turtle,snake]
+    const selectType = document.getElementById('select-type-input')
+    let currenttype = 'Dog'
+    const breedInput = document.getElementById('breed-input')
+    let currentBreed = await fetch(`/breed/0`).then(r=>r.json()).then(d=>d['dogs']);
+
+    // console.log(currentBreed)
+    selectType.onchange = e => changeType(e,currentBreed,selectType,currenttype);
+    breedInput.oninput = e => getBreeds(e,currentBreed);
+
+}
 }
 
-// select animal type [cat,rabbit,dog,turtle,snake]
-const selectType = document.getElementById('select-type-input')
-let currenttype = 'Dog'
-const breedInput = document.getElementById('breed-input')
-let currentBreed = await fetch(`/breed/0`).then(r=>r.json()).then(d=>d['dogs']);
-
-// console.log(currentBreed)
-selectType.onchange = changeType;
-breedInput.oninput = getBreeds;
 
 
 
-
-
-async function changeType(e){
+async function changeType(e,currentBreed,selectType,currenttype){
     const currentType = +e.currentTarget.value;
     // await fetch(`/breed/${currentType}`).then(r=>r.json()).then(d=>console.log(d))
     currentBreed = await fetch(`/breed/${currentType}`).then(r=>r.json()).then(d=>{
@@ -298,7 +368,7 @@ async function changeType(e){
     return;
 }
 // get breeds fn
-function getBreeds(e){
+function getBreeds(e,currentBreed,currenttype){
     let previousBreeds
     // console.log(currenttype)
     const ul = document.querySelector('.breed-ul') // parent element to hold li's
