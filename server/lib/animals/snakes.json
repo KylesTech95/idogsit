@@ -1,0 +1,76 @@
+{
+"description": "A list of snake breeds.",
+  "snakes": [
+    {
+      "family": "Boidae",
+      "common_name": "Boas",
+      "species": [
+        "Boa constrictor",
+        "Boa imperator",
+        "Boa sigma",
+        "Emerald Tree Boa",
+        "Rainbow Boa",
+        "Rosy Boa",
+        "Sand Boa"
+      ],
+      "characteristics": "Constricting snakes found in various parts of the world, with members like the Boa Constrictor known for their size and patterns."
+    },
+    {
+      "family": "Pythonidae",
+      "common_name": "Pythons",
+      "species": [
+        "Ball Python",
+        "Reticulated Python",
+        "Burmese Python",
+        "Green Tree Python"
+      ],
+      "characteristics": "Pythons are also constrictors, but differ from boas in their reproductive methods and often larger size, like the Reticulated Python, the longest snake in the world."
+    },
+    {
+      "family": "Elapidae",
+      "common_name": "Cobras & Relatives",
+      "species": [
+        "Indian Cobra",
+        "King Cobra",
+        "Black Mamba",
+        "Inland Taipan"
+      ],
+      "characteristics": "Highly venomous snakes often found in Africa and Asia. The King Cobra is the longest venomous snake."
+    },
+    {
+      "family": "Viperidae",
+      "common_name": "Vipers & Rattlesnakes",
+      "species": [
+        "Gaboon Viper",
+        "Russell's Viper",
+        "Saw-Scaled Viper",
+        "Western Diamondback Rattlesnake",
+        "Mojave Rattlesnake"
+      ],
+      "characteristics": "Venomous snakes characterized by hinged fangs and often a triangular head shape. Rattlesnakes are known for the rattles on their tails."
+    },
+    {
+      "family": "Colubridae",
+      "common_name": "Colubrids (diverse group)",
+      "species": [
+        "Common Garter Snake",
+        "Corn Snake",
+        "King Snake",
+        "Milk Snake"
+      ],
+      "characteristics": "The largest family of snakes, including a wide range of nonvenomous species and some mildly venomous ones, like the Corn Snake, popular as pets, and the King Snake, known for eating other snakes."
+    },
+    {
+      "family": "Various",
+      "common_name": "Other notable species",
+      "species": [
+        "Eastern Brown Snake",
+        "Coastal Taipan",
+        "Death Adder",
+        "Fer-de-Lance",
+        "Puff Adder"
+      ],
+      "characteristics": "This includes additional venomous species, highlighting their habitats and dangerous venoms."
+    }
+  ]
+}

@@ -272,3 +272,11 @@ selectEelement.onchange = e => {
     console.log(ageVal)
 }
 
+// select animal type [cat,rabbit,dog,turtle,snake]
+const selectType = document.getElementById('select-type-input')
+selectType.onchange = changeType
+async function changeType(e){
+    const currentType = +e.currentTarget.value;
+    await fetch(`/breed/${currentType}`).then(r=>r.json()).then(d=>console.log(d))
+    return;
+}
