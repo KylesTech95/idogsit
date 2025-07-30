@@ -385,7 +385,7 @@ font-size:26pt;
 /* .quantity-container{
     overflow:hidden;
 } */
-.quantity-col{
+.quantity-col, #petname-col{
 height:100%;
 /* border:2px solid yellow;  */
 width:100%;
@@ -408,7 +408,8 @@ label{
 }
 .date-col > label,
 .quantity-col > label,
-.proof-col > label{
+.proof-col > label,
+.petinfo-col > div > label{
     padding:.5rem;
     overflow: hidden;
     position:relative;
@@ -479,7 +480,9 @@ cursor:pointer;
     width:100%;
     /* border:2px solid red; */
 }
-
+.petinfo-col{
+    font-family: var(--font-family-tertiary);
+}
 .proof-col{
 height:100%;
 /* border:2px solid yellow;  */
@@ -599,8 +602,8 @@ background:var(--col-tint);
 
 
 /* media queries */
-@media screen and (max-width:900px) {
- .enlarge-list-container{
+@media screen and (max-width:600px) {
+ .enlarge-list-container{ 
     gap:unset;
 }
     .col-info>p{

@@ -6,8 +6,9 @@ const cors = require('cors')
 const {pool} = require('./lib/db.js')
 
 app.use((req,res,next)=>{
-    console.log(pool)
-
+    // console.log(pool)
+    const current_path = req.path;
+    console.log(current_path)
     next()
 })
 // middleware

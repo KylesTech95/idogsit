@@ -125,7 +125,8 @@ window.onscroll = (e) => {
 
 // submit form
 let radios = [...document.querySelectorAll('input')].filter(y=>y.type==='radio')
-const payload = {startDate:undefined,endDate:undefined,quantity:undefined,proof_of_vaccination:undefined}
+const payload = {startDate:undefined,endDate:undefined,age:undefined,quantity:undefined,proof_of_vaccination:undefined}
+let ageVal;
 form.onsubmit = e => {
     e.preventDefault();
     let currentCheckedRadio = radios.find(r=>r.checked)
@@ -252,4 +253,22 @@ updateNavigator('gallery','disable')
 // updateNavigator('home','disable')
 // updateNavigator('book','disable')
 
+
+
+
+// pet age -> icon/size
+const selectEelement = document.getElementById('select-input-element')
+const options = [...selectEelement.children];
+const [years,months,weeks] = [...options].map(( x, index) => +x.value === index ? {value:x.value,content:x.textContent} : null);
+
+console.log(years,months,weeks) // formatted times
+const currentSize = document.getElementById('current-size');
+
+// select the value onchange event
+selectEelement.onchange = e => {
+    const value = e.currentTarget.value;
+    console.log(value)
+    ageVal  = [years,months,weeks][value]
+    console.log(ageVal)
+}
 

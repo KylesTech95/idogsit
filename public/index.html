@@ -128,6 +128,50 @@
                 </div>
             </div>
 
+            <!-- pet columns [name / age / height / weight / breed] all can be null -->
+
+            <div id="pet-info-container" class="pet-container">
+                <div class="petinfo-col">
+                    <div>
+                        <label for="petname">Name</label>
+                        <input type="text" name="petname" id="petname-input" class="noselect" placeholder="Name">
+                    </div>
+                    <!-- pet age  -->
+                    <div>
+                        <label for="petage">Age</label>
+                        <input type="number" min="" name="petage" id="petage-input" class="noselect" placeholder="Age">
+                        <select name="select-input-element" id="select-input-element">
+                            <option value="0">Years</option>
+                            <option value="1">Months</option>
+                            <option value="2">Weeks</option>
+                        </select>
+                        <div id="petsize-container">
+                            <img id="current-size" class="size-current size ">
+                        </div>
+                    </div>
+
+                    <!-- pet height and weight -->
+                    <div>
+                        <!-- height -->
+                        <label for="petheight">Height</label>
+                        <input type="text" name="" id="">
+                        <select name="select-input-element2" id="select-input-element2">
+                            <option value="0">cm</option>
+                            <option value="1">in</option>
+                        </select>
+
+                        <!-- weight -->
+                         <label for="petweight">Weight</label>
+                        <input type="text" name="" id="">
+                        <select name="select-input-element3" id="select-input-element3">
+                            <option value="0">lbs</option>
+                            <option value="1">kg</option>
+                        </select>
+
+                    </div>
+                    
+                </div>
+            </div>
         <!-- proof of vaccination -->
          <div id="proof-title" class="form-title">
             <h1>Proof of Vaccination</h1>
