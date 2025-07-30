@@ -216,14 +216,14 @@ function updateNavigator(name,action){
     const navitems = [...document.querySelectorAll('.nav-list-item')];
     let item = navitems.find(n=>{
         n = n.children[0].textContent // a element
-        console.log(n)
+        // console.log(n)
         return new RegExp(name,'i').test(n) || name === n || name === n.toLowerCase();
     }) // find item
         // console.log(item)
         id = document.getElementById(`${item.textContent.toLowerCase()}-id`) // access the id of each section by it's item_name
 
 
-        console.log(id,item)
+        // console.log(id,item)
     
         return action=='disable' ? disableItem(item,id) : null
 
@@ -261,22 +261,99 @@ const selectEelement = document.getElementById('select-input-element')
 const options = [...selectEelement.children];
 const [years,months,weeks] = [...options].map(( x, index) => +x.value === index ? {value:x.value,content:x.textContent} : null);
 
-console.log(years,months,weeks) // formatted times
+// console.log(years,months,weeks) // formatted times
 const currentSize = document.getElementById('current-size');
 
 // select the value onchange event
 selectEelement.onchange = e => {
     const value = e.currentTarget.value;
-    console.log(value)
+    // console.log(value)
     ageVal  = [years,months,weeks][value]
-    console.log(ageVal)
+    // console.log(ageVal)
 }
 
 // select animal type [cat,rabbit,dog,turtle,snake]
 const selectType = document.getElementById('select-type-input')
-selectType.onchange = changeType
+let currenttype = 'Dog'
+const breedInput = document.getElementById('breed-input')
+let currentBreed = await fetch(`/breed/0`).then(r=>r.json()).then(d=>d['dogs']);
+
+// console.log(currentBreed)
+selectType.onchange = changeType;
+breedInput.oninput = getBreeds;
+
+
+
+
+
 async function changeType(e){
     const currentType = +e.currentTarget.value;
-    await fetch(`/breed/${currentType}`).then(r=>r.json()).then(d=>console.log(d))
+    // await fetch(`/breed/${currentType}`).then(r=>r.json()).then(d=>console.log(d))
+    currentBreed = await fetch(`/breed/${currentType}`).then(r=>r.json()).then(d=>{
+        currenttype = [...selectType.children].map(x=>x.textContent)[currentType]
+        let current_animal = currenttype.toLowerCase()+"s";
+        return d[current_animal]
+    })
+    // console.log(currentBreed)
     return;
+}
+// get breeds fn
+function getBreeds(e){
+    let previousBreeds
+    // console.log(currenttype)
+    const ul = document.querySelector('.breed-ul') // parent element to hold li's
+    let len = currentBreed.length;
+    
+    if(document.querySelectorAll('.breed-li')){
+        previousBreeds = [...document.querySelectorAll('.breed-li')]
+        if(previousBreeds.length>0){
+            previousBreeds.map(x=>x.remove()); // remove breed
+        }
+    
+    }
+
+    if(!currentBreed){
+        console.log('current breed is not active')
+    } else {
+        if(len >= 100){
+            // console.log("Length of animals:\n"+len)
+        } else {
+            // console.log(currentBreed)
+        }
+
+        for(let i = 0; i < currentBreed.length; i++){
+            let li = document.createElement('li'), family = document.createElement('p'), p = document.createElement('p');
+            li.classList.add('breed-li');
+            family.classList.add('breed-family');
+            family.classList.add('breed-p')
+            p.classList.add('breed-p')
+            if(e.currentTarget.value==''){
+                return [...document.querySelectorAll('.breed-li')].map(t=>t.remove())
+            }
+            else {
+                if(currenttype==='Snake'){
+                family.textContent = currentBreed[i].family;
+                p.textContent = [...currentBreed[i].species].join(", ");
+                } else if(currenttype==='Turtle'){
+                    family.textContent = currentBreed[i].type;
+                    p.textContent = currentBreed[i].name + " / " + currentBreed[i].scientific_name
+                }
+                else {
+                    p.textContent = currentBreed[i];
+                }
+            }
+
+            li.appendChild(family)
+            li.appendChild(p);
+            ul.appendChild(li);
+
+            li.onclick = ev => {
+            let text = [...ev.currentTarget.children].map(child=>child.textContent).join("\n");
+            breedInput.value = text;
+    }
+        }
+        
+    }
+
+    // console.log(breedInput);
 }

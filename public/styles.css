@@ -178,6 +178,7 @@ background-image:var(--col-primary-linear-up);
     transform: translate(0,0) rotate(0) scale(.9);;
     opacity: 0;
 }
+
 #dogpaw{
 z-index:997;
 animation: doganimate 2.5s forwards;
@@ -689,4 +690,52 @@ background:var(--col-tint);
 
     }
 }
+}
+
+
+.breed-ul{
+height:100%;
+/* position:absolute; */
+/* top:300px;
+right:200px; */
+display:flex;
+flex-direction: column;
+align-items: left;
+justify-content: start;
+width:100%;
+min-height:0px;
+max-height:200px;
+overflow-y:scroll;
+background:#fff;
+/* padding:.5rem; */
+z-index: 999;
+border:1rem double var(--col-tint);
+}
+.breed-family{
+    color:var(--col-secondary);
+}
+.breed-li{
+    width:100%;
+    height:100%;
+    /* background:red; */
+    padding:.25rem;
+    border-bottom:.75px solid #000;
+    font-family: var(--font-family-tertiary);
+    display:flex;
+    flex-direction: column;
+    align-items: start;
+    justify-content: center;
+}
+.breed-p{
+    padding:inherit;
+    font-size:16pt;
+    width:100%;
+    height:100%;
+    /* border-bottom:.5px solid var(--tint); */
+}
+.breed-li:hover{
+    background-color:#000;
+    color:var(--col-primary);
+    cursor:pointer;
+
 }
