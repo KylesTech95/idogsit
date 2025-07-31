@@ -1,6 +1,7 @@
 {
 "description": "A list of snake breeds.",
-  "snakes": [
+"animal":"snake",
+  "list": [
     {
       "family": "Boidae",
       "common_name": "Boas",

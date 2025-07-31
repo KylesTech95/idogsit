@@ -8,12 +8,13 @@ let animals = ['dog-run','puppy','dog-play'];
 const servicesListContainer = document.getElementById('services-list-container');
 const servicesListItems = [...servicesListContainer.children].filter((x,y)=>x.tagName === 'LI');
 const hr_services = document.querySelector('.hr-services');
+const quantityEnable = document.getElementById('quantity-enable-btn')
 const service_images = ['behavior','bowl','monitor','treatment','waste']
 const petinfoCol = `<div class="petinfo-col">
                     <div id="pettype-col">
                         <ul class="breed-ul"></ul>
                         <label for="pettype">Type</label>
-                        <select name="pettype" id="select-type-input">
+                        <select name="pettype" class="select-type" id="select-type-input">
                             <option value="0">Dog</option>
                             <option value="1">Cat</option>
                             <option value="2">Rabbit</option>
@@ -93,6 +94,7 @@ numInput.oninput = e => {
     if([...petinfoContainer.children].length > 0){
         [...petinfoContainer.children].map(ch => ch.remove());
     }
+
     let max = 12;
     while(!e.currentTarget.value){
         if(!petimg.classList.contains('animation-pets-img')){
@@ -112,6 +114,11 @@ numInput.oninput = e => {
     }
 
     let targetNum = +e.currentTarget.value;
+
+    console.log(targetNum)
+    if(!e.currentTarget.value){
+        console.log('nothing entered')
+    }
     // append pet info cols
     for(let i = 0; i < targetNum; i++){
         const parser = new DOMParser();
@@ -119,6 +126,7 @@ numInput.oninput = e => {
         const petElement = element.children[0].children[1].children[0]
 
         petinfoContainer.appendChild(petElement)
+
     }
 
 }
@@ -309,8 +317,140 @@ function clearInputs(){
     return allinputs.map(x=>x.value = '');
 }
 
+let lockQuantity = false;
+// quantity enable
+    quantityEnable.onclick = e => {
+        console.log(e.currentTarget);
+        lockQuantity = false;
+        numInput.removeAttribute('disabled');
+        quantityEnable.classList.add('hidden')
+    }
 
+// pet age -> icon/size
+window.onchange = async() => {
 
+    if(lockQuantity==true){
+        numInput.setAttribute('disabled',true);
+        quantityEnable.classList.remove('hidden')
+    } else {
+            numInput.removeAttribute('disabled');
+            quantityEnable.classList.add('hidden')
+    }
+    let allPetInputs = document.querySelectorAll('.petinfo-col');
+    // console.log(allPetInputs);
+        let ap = allPetInputs
+    for(let i = 0; i < ap.length; i++){
+        
+        // console.log(ap[i])
+        let ul, typeSelect,breedSelect,name,age, ageSuffix,height, heightMeasure,weight, weightMeasure// instatiate variables within petinfo-col
+        ul = ap[i].children[0].children[0];
+        ul.classList.add('breed-ul')
+        typeSelect = ap[i].children[0].children[2];
+        breedSelect = ap[i].children[0].children[4];
+        breedSelect.value = ''
+        name = ap[i].children[1].children[1];
+        age = ap[i].children[2].children[1];
+        ageSuffix = ap[i].children[2].children[2];
+        height = ap[i].children[3].children[1];
+        heightMeasure = ap[i].children[3].children[2];
+        weight = ap[i].children[3].children[4];
+        weightMeasure = ap[i].children[3].children[5];
+
+        // verify variable placements
+        // console.log(typeSelect)
+        // console.log(breedSelect)
+        // console.log(name)
+        // console.log(age);
+        // console.log(ageSuffix)
+        // console.log(height)
+        // console.log(heightMeasure)
+        // console.log(weight)
+        // console.log(weightMeasure)
+
+        // execute methods
+        console.log(ul)
+        if(typeSelect){
+            typeSelect.onchange = async e => {
+                lockQuantity = true;
+                if(ul.children.length > 0){
+                    let children;
+                    children = [...ul.children].map(x=>x.remove()); // remove lis from ul onchange
+                }
+                const value = e.currentTarget.value;
+                const textcontent = e.currentTarget.textContent;
+                
+                console.log(value)
+                console.log(textcontent)
+
+                // capture current breeds object
+                let currentBreed = await getBreeds(value);
+                console.log(currentBreed);
+                let {list, animal} = currentBreed;
+                console.log(animal)
+                
+                // activate ul and store lis of breeds
+                //  create lis
+                for(let i = 0; i < list.length; i++){
+                    // declare/create elements
+                    let li = document.createElement('li');
+                    let para = document.createElement('p');
+                    let family = document.createElement('p');
+                    let type = document.createElement('p')
+                    let scientific_name = document.createElement('p')
+                    let tname = document.createElement('p')
+                    // config textcontent
+                    // console.log(list[i])
+                    
+                    // switch statement to read list by animal/breed
+                    switch(true){
+                        case animal==='snake':
+                        family.textContent = list[i].family;
+                        para.textContent = list[i].species.join(`, `)
+                        break;
+                        case animal==='turtle':
+                        type.textContent = list[i].type
+                        scientific_name.textContent = list[i].scientific_name
+                        tname.textContent = list[i].name
+                        break;
+                        default:
+                        para.textContent = list[i];
+                        break;
+                    }
+
+                    // config classes
+                    para.classList.add('breed-p')
+                    li.classList.add('breed-li');
+                    family.classList.add('breed-family');
+                    type.classList.add('breed-type')
+
+                    // append
+                    if(type&&scientific_name&&tname){
+                        li.append(type);
+                        li.append(scientific_name);
+                        li.append(tname);
+                    }
+                    family ? li.appendChild(family) : null;
+                    li.appendChild(para);
+                    ul.appendChild(li)
+
+                    // li onclick event
+                    li.onclick = e => {
+                        console.log(e.currentTarget)
+                        breedSelect.value =  [...e.currentTarget.children].filter(el=>el.textContent).map(x=>x.textContent).join` `
+                        console.log(breedSelect.value)
+                    }
+                }
+                
+            }
+        }
+    }
+}
+
+// get breeds fn
+    async function getBreeds(value){
+        let breeds = await fetch('/breed/'+value).then(r=>r.json()).then(d=>d);
+        return breeds;
+    }
 
 // navigation
 /*------------------------------------------------------------------- */
@@ -318,112 +458,3 @@ updateNavigator('gallery','disable')
 // updateNavigator('services','disable')
 // updateNavigator('home','disable')
 // updateNavigator('book','disable')
-
-
-
-
-// pet age -> icon/size
-window.onchange = async() => {
-    if(petinfoContainer.children.length > 0){
-    const selectEelement = document.getElementById('select-input-element')
-    const options = [...selectEelement.children];
-    const [years,months,weeks] = [...options].map(( x, index) => +x.value === index ? {value:x.value,content:x.textContent} : null);
-
-    // console.log(years,months,weeks) // formatted times
-    const currentSize = document.getElementById('current-size');
-
-    // select the value onchange event
-    selectEelement.onchange = e => {
-        const value = e.currentTarget.value;
-        // console.log(value)
-        ageVal  = [years,months,weeks][value]
-        // console.log(ageVal)
-    }
-
-    // select animal type [cat,rabbit,dog,turtle,snake]
-    const selectType = document.getElementById('select-type-input')
-    let currenttype = 'Dog'
-    const breedInput = document.getElementById('breed-input')
-    let currentBreed = await fetch(`/breed/0`).then(r=>r.json()).then(d=>d['dogs']);
-
-    // console.log(currentBreed)
-    selectType.onchange = e => changeType(e,currentBreed,selectType,currenttype);
-    breedInput.oninput = e => getBreeds(e,currentBreed);
-
-}
-}
-
-
-
-
-async function changeType(e,currentBreed,selectType,currenttype){
-    const currentType = +e.currentTarget.value;
-    // await fetch(`/breed/${currentType}`).then(r=>r.json()).then(d=>console.log(d))
-    currentBreed = await fetch(`/breed/${currentType}`).then(r=>r.json()).then(d=>{
-        currenttype = [...selectType.children].map(x=>x.textContent)[currentType]
-        let current_animal = currenttype.toLowerCase()+"s";
-        return d[current_animal]
-    })
-    // console.log(currentBreed)
-    return;
-}
-// get breeds fn
-function getBreeds(e,currentBreed,currenttype){
-    let previousBreeds
-    // console.log(currenttype)
-    const ul = document.querySelector('.breed-ul') // parent element to hold li's
-    let len = currentBreed.length;
-    
-    if(document.querySelectorAll('.breed-li')){
-        previousBreeds = [...document.querySelectorAll('.breed-li')]
-        if(previousBreeds.length>0){
-            previousBreeds.map(x=>x.remove()); // remove breed
-        }
-    
-    }
-
-    if(!currentBreed){
-        console.log('current breed is not active')
-    } else {
-        if(len >= 100){
-            // console.log("Length of animals:\n"+len)
-        } else {
-            // console.log(currentBreed)
-        }
-
-        for(let i = 0; i < currentBreed.length; i++){
-            let li = document.createElement('li'), family = document.createElement('p'), p = document.createElement('p');
-            li.classList.add('breed-li');
-            family.classList.add('breed-family');
-            family.classList.add('breed-p')
-            p.classList.add('breed-p')
-            if(e.currentTarget.value==''){
-                return [...document.querySelectorAll('.breed-li')].map(t=>t.remove())
-            }
-            else {
-                if(currenttype==='Snake'){
-                family.textContent = currentBreed[i].family;
-                p.textContent = [...currentBreed[i].species].join(", ");
-                } else if(currenttype==='Turtle'){
-                    family.textContent = currentBreed[i].type;
-                    p.textContent = currentBreed[i].name + " / " + currentBreed[i].scientific_name
-                }
-                else {
-                    p.textContent = currentBreed[i];
-                }
-            }
-
-            li.appendChild(family)
-            li.appendChild(p);
-            ul.appendChild(li);
-
-            li.onclick = ev => {
-            let text = [...ev.currentTarget.children].map(child=>child.textContent).join("\n");
-            breedInput.value = text;
-    }
-        }
-        
-    }
-
-    // console.log(breedInput);
-}

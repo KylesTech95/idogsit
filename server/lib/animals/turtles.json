@@ -1,6 +1,7 @@
 {
   "description":"List of turtle species",
-  "turtles": [
+"animal":"turtle",
+  "list": [
     {
       "name": "Leatherback Turtle",
       "scientific_name": "Dermochelys coriacea",

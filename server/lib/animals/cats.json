@@ -1,5 +1,6 @@
 {"description": "A list of cat breeds.",
-  "cats":
+"animal":"cat",
+  "list":
 [
   "Abyssinian",
   "Aegean",
