@@ -456,7 +456,9 @@ label{
 
 }
 #quantity-enable-btn:hover,
-#quantity-enable-btn:active{
+#quantity-enable-btn:active,
+.del-btn:hover,
+.del-btn:active{
     cursor:pointer;
     transform:scale(.82);
     transition: .2s;
@@ -499,6 +501,7 @@ cursor:pointer;
     /* border:2px solid red; */
 }
 .petinfo-col{
+    position:relative;
     font-family: var(--font-family-tertiary);
 }
 .proof-col{
@@ -621,6 +624,15 @@ background:var(--col-tint);
 .hidden{
         display:none;
     }
+
+
+.del-btn{
+    position:absolute;
+    right:0;
+    top:0;
+    background:#f00;
+    padding:.5rem .75rem;
+}
 /* media queries */
 @media screen and (max-width:600px) {
  .enlarge-list-container{ 

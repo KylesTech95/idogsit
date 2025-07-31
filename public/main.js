@@ -333,7 +333,7 @@ window.onchange = async() => {
         numInput.setAttribute('disabled',true);
         quantityEnable.classList.remove('hidden')
     } else {
-            numInput.removeAttribute('disabled');
+             numInput.removeAttribute('disabled');
             quantityEnable.classList.add('hidden')
     }
     let allPetInputs = document.querySelectorAll('.petinfo-col');
@@ -355,6 +355,12 @@ window.onchange = async() => {
         heightMeasure = ap[i].children[3].children[2];
         weight = ap[i].children[3].children[4];
         weightMeasure = ap[i].children[3].children[5];
+        
+        let delBtn = document.createElement('div')
+        delBtn.classList.add('del-btn')
+        delBtn.textContent = "X";
+        ap[i].append(delBtn)
+        console.log(ap[i])
 
         // verify variable placements
         // console.log(typeSelect)
@@ -441,6 +447,14 @@ window.onchange = async() => {
                     }
                 }
                 
+            }
+        }
+        if(delBtn){
+            if(delBtn.parentElement===ap[i]){
+                delBtn.onclick = () => {
+                    ap[i].remove(); // remove info
+                    numInput.value>= 0 ? numInput.value-=1 : null;
+                }
             }
         }
     }
