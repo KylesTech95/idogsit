@@ -32,7 +32,7 @@ const petinfoCol = `<div class="petinfo-col">
                     <div>
                         <label for="petage">Age</label>
                         <input type="number" min="" name="petage" id="petage-input" class="noselect" placeholder="Age">
-                        <select name="select-input-element" id="select-input-element">
+                        <select name="select-input-age" id="select-input-age">
                             <option value="0">Years</option>
                             <option value="1">Months</option>
                             <option value="2">Weeks</option>
@@ -47,7 +47,7 @@ const petinfoCol = `<div class="petinfo-col">
                         <!-- height -->
                         <label for="petheight">Height</label>
                         <input type="text" name="" id="">
-                        <select name="select-input-element2" id="select-input-element2">
+                        <select name="select-input-height" id="select-input-height">
                             <option value="0">cm</option>
                             <option value="1">in</option>
                         </select>
@@ -55,13 +55,38 @@ const petinfoCol = `<div class="petinfo-col">
                         <!-- weight -->
                          <label for="petweight">Weight</label>
                         <input type="text" name="" id="">
-                        <select name="select-input-element3" id="select-input-element3">
+                        <select name="select-input-weight" id="select-input-weight">
                             <option value="0">lbs</option>
                             <option value="1">kg</option>
                         </select>
 
                     </div>
-                    
+                    <!-- proof of vaccination -->
+         <div id="proof-title" class="form-title">
+            <h1 class="vacc">Proof of Vaccination</h1>
+            </div>
+
+            <div id="proof-container">
+                <div class="proof-col">
+                    <div class="radio-container">
+                        <!-- yes -->
+                        <div>
+                            <label for="proof_of_vaccination">YES</label>
+                            <input type="radio" value="true" name="proof_of_vaccination" id="proof-yes"required>
+                        </div>
+                        <!-- no -->
+                        <div>
+                            <label for="proof_of_vaccination">NO</label>
+                            <input type="radio" value="false" name="proof_of_vaccination" id="proof-no"required>
+                        </div>
+                        <!-- other -->
+                        <div>
+                            <label for="proof_of_vaccination">OTHER</label>
+                            <input type="radio" value="other" name="proof_of_vaccination" id="proof-other"required>
+                        </div>
+                    </div>
+                </div>
+            </div>
                 </div>`
 let CURRENT_DEVICE = { // current device object with 2 boolean properties
     mobile:false,
@@ -328,7 +353,10 @@ let lockQuantity = false;
 
 // pet age -> icon/size
 window.onchange = async() => {
-
+            if(document.querySelectorAll('.del-btn').length > 0){
+                let allDls = [...document.querySelectorAll('.del-btn')]
+                allDls.map(d=>d.remove());
+            }
     if(lockQuantity==true){
         numInput.setAttribute('disabled',true);
         quantityEnable.classList.remove('hidden')
@@ -338,142 +366,164 @@ window.onchange = async() => {
     }
     let allPetInputs = document.querySelectorAll('.petinfo-col');
     // console.log(allPetInputs);
-        let ap = allPetInputs
-    for(let i = 0; i < ap.length; i++){
-        
-        // console.log(ap[i])
-        let ul, typeSelect,breedSelect,name,age, ageSuffix,height, heightMeasure,weight, weightMeasure// instatiate variables within petinfo-col
-        ul = ap[i].children[0].children[0];
-        ul.classList.add('breed-ul')
-        typeSelect = ap[i].children[0].children[2];
-        breedSelect = ap[i].children[0].children[4];
-        // breedSelect.value = ''
-        name = ap[i].children[1].children[1];
-        age = ap[i].children[2].children[1];
-        ageSuffix = ap[i].children[2].children[2];
-        height = ap[i].children[3].children[1];
-        heightMeasure = ap[i].children[3].children[2];
-        weight = ap[i].children[3].children[4];
-        weightMeasure = ap[i].children[3].children[5];
-        
-        let delBtn = document.createElement('div')
-        delBtn.classList.add('del-btn')
-        delBtn.textContent = "X";
-        ap[i].append(delBtn)
-        console.log(ap[i])
+    let ap = allPetInputs
+        for(let i = 0; i < ap.length; i++){
+            
+            // console.log(ap[i])
+            let typeSelect,breedSelect,name,age, ageSuffix,height, heightMeasure,weight, weightMeasure,// instatiate variables within petinfo-col
+            ul = ap[i].children[0].children[0];
+            ul.classList.add('breed-ul')
+            typeSelect = ap[i].children[0].children[2];
+            breedSelect = ap[i].children[0].children[4];
+            // breedSelect.value = ''
+            name = ap[i].children[1].children[1];
+            age = ap[i].children[2].children[1];
+            ageSuffix = ap[i].children[2].children[2];
+            height = ap[i].children[3].children[1];
+            heightMeasure = ap[i].children[3].children[2];
+            weight = ap[i].children[3].children[4];
+            weightMeasure = ap[i].children[3].children[5];
+            
+            let delBtn = document.createElement('div')
+            delBtn.classList.add('del-btn')
+            delBtn.textContent = "X";
+            ap[i].append(delBtn)
+            console.log(ap[i])
 
-        // verify variable placements
-        // console.log(typeSelect)
-        // console.log(breedSelect)
-        // console.log(name)
-        // console.log(age);
-        // console.log(ageSuffix)
-        // console.log(height)
-        // console.log(heightMeasure)
-        // console.log(weight)
-        // console.log(weightMeasure)
+            // verify variable placements
+            // console.log(typeSelect)
+            // console.log(breedSelect)
+            // console.log(name)
+            // console.log(age);
+            // console.log(ageSuffix)
+            // console.log(height)
+            // console.log(heightMeasure)
+            // console.log(weight)
+            // console.log(weightMeasure)
 
-        // execute methods
-        console.log(ul)
-        if(typeSelect){
-            typeSelect.onchange = async e => {
-                lockQuantity = true;
-                if(ul.children.length > 0){
-                    let children;
-                   children = [...ul.children].map(x=>x.remove()); // remove lis from ul onchange
-                }
-                const value = e.currentTarget.value;
-                const textcontent = e.currentTarget.textContent;
-                
-                console.log(value)
-                console.log(textcontent)
-
-                // capture current breeds object
-                let currentBreed = await getBreeds(value);
-                console.log(currentBreed);
-                let {list, animal} = currentBreed;
-                console.log(animal)
-                
-                // activate ul and store lis of breeds
-                //  create lis
-                for(let i = 0; i < list.length; i++){
-                    // declare/create elements
-                    let li = document.createElement('li');
-                    let para = document.createElement('p');
-                    let family = document.createElement('p');
-                    let type = document.createElement('p')
-                    let scientific_name = document.createElement('p')
-                    let tname = document.createElement('p')
-                    // config textcontent
-                    // console.log(list[i])
+            // execute methods
+            if(typeSelect){
+                typeSelect.onchange = async e => {
+                    lockQuantity = true;
+                    if(ul.children.length > 0){
+                        let children;
+                    children = [...ul.children].map(x=>x.remove()); // remove lis from ul onchange
+                    }
+                    const value = e.currentTarget.value;
+                    const textcontent = e.currentTarget.textContent;
                     
-                    // switch statement to read list by animal/breed
-                    switch(true){
-                        case animal==='snake':
-                        family.textContent = list[i].family;
-                        para.textContent = list[i].species.join(`, `)
-                        break;
-                        case animal==='turtle':
-                        type.textContent = list[i].type
-                        scientific_name.textContent = list[i].scientific_name
-                        tname.textContent = list[i].name
-                        break;
-                        default:
-                        para.textContent = list[i];
-                        break;
-                    }
+                    console.log(value)
+                    console.log(textcontent)
 
-                    // config classes
-                    para.classList.add('breed-p')
-                    li.classList.add('breed-li');
-                    family.classList.add('breed-family');
-                    type.classList.add('breed-type')
+                    // capture current breeds object
+                    let currentBreed = await getBreeds(value);
+                    console.log(currentBreed);
+                    let {list, animal} = currentBreed;
+                    // console.log(animal)
+                    
+                    // activate ul and store lis of breeds
+                    //  create lis
+                    for(let i = 0; i < list.length; i++){
+                        let li = addRows(ul,i,animal,list)
 
-                    // append
-                    if(type&&scientific_name&&tname){
-                        li.append(type);
-                        li.append(scientific_name);
-                        li.append(tname);
+                        // li onclick event
+                        li.onclick = e => {
+                            console.log(e.currentTarget)
+                            breedSelect.value =  [...e.currentTarget.children].filter(el=>el.textContent).map(x=>x.textContent).join` `
+                            console.log(breedSelect.value)
+                        }
                     }
-                    family ? li.appendChild(family) : null;
-                    li.appendChild(para);
-                    ul.appendChild(li)
-
-                    // li onclick event
-                    li.onclick = e => {
-                        console.log(e.currentTarget)
-                        breedSelect.value =  [...e.currentTarget.children].filter(el=>el.textContent).map(x=>x.textContent).join` `
-                        console.log(breedSelect.value)
-                    }
+                    // handle breed input
+                        breedSelect.oninput = e => handleBreedInput(e,animal,list)
                 }
-                    breedSelect.oninput = e => handleBreedInput(e,list)
             }
-        }
-        // delete a list-item
-        if(delBtn){
-            if(delBtn.parentElement===ap[i]){
-                delBtn.onclick = () => {
-                    ap[i].remove(); // remove info
-                    numInput.value>= 0 ? numInput.value-=1 : null;
+            // delete a list-item
+            if(delBtn){
+                if(delBtn.parentElement===ap[i]){
+                    delBtn.onclick = () => {
+                        ap[i].remove(); // remove info
+                        numInput.value>= 0 ? numInput.value-=1 : null;
+                    }
                 }
             }
         }
-    }
 }
 
+function addRows(ul,i,animal,list){
+    // declare/create elements
+    let li = document.createElement('li');
+    let para = document.createElement('p');
+    let family = document.createElement('p');
+    let type = document.createElement('p')
+    let scientific_name = document.createElement('p')
+    let tname = document.createElement('p')
+    // config textcontent
+    // console.log(list[i])
+    
+    // switch statement to read list by animal/breed
+    switch(true){
+        case animal==='snake':
+        family.textContent = list[i].family;
+        para.textContent = list[i].species.join(`, `)
+        break;
+        case animal==='turtle':
+        type.textContent = list[i].type
+        scientific_name.textContent = list[i].scientific_name
+        tname.textContent = list[i].name
+        break;
+        default:
+        para.textContent = list[i];
+        break;
+    }
+
+    // config classes
+    para.classList.add('breed-p')
+    li.classList.add('breed-li');
+    family.classList.add('breed-family');
+    type.classList.add('breed-type')
+
+    // append
+    if(type&&scientific_name&&tname){
+        li.append(type);
+        li.append(scientific_name);
+        li.append(tname);
+    }
+    family ? li.appendChild(family) : null;
+    li.appendChild(para);
+    ul.appendChild(li)
+
+    return li
+}
 // get breeds fn
     async function getBreeds(value){
         let breeds = await fetch('/breed/'+value).then(r=>r.json()).then(d=>d);
         return breeds;
     }
 
-    function handleBreedInput(e,array){
+    function handleBreedInput(e,animal,array){
         let key = e.currentTarget.value;
-        
+        let regex = new RegExp(key,'gi')
         console.log(key)
-        console.log(array)
+        // console.log(array)
         // sort list based on value(key)
-        
+        let mylist;
+        switch(true){
+            case animal==='snake':
+                console.log(array)
+                mylist = new Set([...array].map(item => [...item.species]).flat())
+            break;
+            case animal==='turtle':
+                mylist = [...array].map(item => item.type + " " + item.name)
+            break;
+            default:
+            mylist = array.map(item => item);
+            break;
+        }
+
+        // console.log(mylist)
+        let filtered = [...mylist].filter((x,y)=>regex.test(x))
+        console.log(filtered)
+
     }  
 // navigation
 /*------------------------------------------------------------------- */
