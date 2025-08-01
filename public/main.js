@@ -347,7 +347,7 @@ window.onchange = async() => {
         ul.classList.add('breed-ul')
         typeSelect = ap[i].children[0].children[2];
         breedSelect = ap[i].children[0].children[4];
-        breedSelect.value = ''
+        // breedSelect.value = ''
         name = ap[i].children[1].children[1];
         age = ap[i].children[2].children[1];
         ageSuffix = ap[i].children[2].children[2];
@@ -380,7 +380,7 @@ window.onchange = async() => {
                 lockQuantity = true;
                 if(ul.children.length > 0){
                     let children;
-                    children = [...ul.children].map(x=>x.remove()); // remove lis from ul onchange
+                   children = [...ul.children].map(x=>x.remove()); // remove lis from ul onchange
                 }
                 const value = e.currentTarget.value;
                 const textcontent = e.currentTarget.textContent;
@@ -446,9 +446,10 @@ window.onchange = async() => {
                         console.log(breedSelect.value)
                     }
                 }
-                
+                    breedSelect.oninput = e => handleBreedInput(e,list)
             }
         }
+        // delete a list-item
         if(delBtn){
             if(delBtn.parentElement===ap[i]){
                 delBtn.onclick = () => {
@@ -466,6 +467,14 @@ window.onchange = async() => {
         return breeds;
     }
 
+    function handleBreedInput(e,array){
+        let key = e.currentTarget.value;
+        
+        console.log(key)
+        console.log(array)
+        // sort list based on value(key)
+        
+    }  
 // navigation
 /*------------------------------------------------------------------- */
 updateNavigator('gallery','disable')
