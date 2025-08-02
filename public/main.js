@@ -140,9 +140,8 @@ numInput.oninput = e => {
 
     let targetNum = +e.currentTarget.value;
 
-    console.log(targetNum)
     if(!e.currentTarget.value){
-        console.log('nothing entered')
+        // console.log('nothing entered')
     }
     // append pet info cols
     for(let i = 0; i < targetNum; i++){
@@ -368,14 +367,12 @@ window.onchange = async() => {
     // console.log(allPetInputs);
     let ap = allPetInputs
         for(let i = 0; i < ap.length; i++){
-            
             // console.log(ap[i])
             let typeSelect,breedSelect,name,age, ageSuffix,height, heightMeasure,weight, weightMeasure,// instatiate variables within petinfo-col
             ul = ap[i].children[0].children[0];
             ul.classList.add('breed-ul')
             typeSelect = ap[i].children[0].children[2];
             breedSelect = ap[i].children[0].children[4];
-            // breedSelect.value = ''
             name = ap[i].children[1].children[1];
             age = ap[i].children[2].children[1];
             ageSuffix = ap[i].children[2].children[2];
@@ -384,6 +381,13 @@ window.onchange = async() => {
             weight = ap[i].children[3].children[4];
             weightMeasure = ap[i].children[3].children[5];
             
+            typeSelect.setAttribute('name','type'+(i+1))
+            breedSelect.setAttribute('name','breed'+(i+1))
+            name.setAttribute('name','name'+(i+1))
+            age.setAttribute('name','age'+(i+1))
+            height.setAttribute('name','height'+(i+1))
+            weight.setAttribute('name','weight'+(i+1))
+
             let delBtn = document.createElement('div')
             delBtn.classList.add('del-btn')
             delBtn.textContent = "X";
@@ -402,6 +406,7 @@ window.onchange = async() => {
             // console.log(weightMeasure)
 
             // execute methods
+            
             if(typeSelect){
                 typeSelect.onchange = async e => {
                     lockQuantity = true;
@@ -431,6 +436,32 @@ window.onchange = async() => {
                             console.log(e.currentTarget)
                             breedSelect.value =  [...e.currentTarget.children].filter(el=>el.textContent).map(x=>x.textContent).join` `
                             console.log(breedSelect.value)
+                        }
+                    }
+                    // handle breed input
+                        breedSelect.oninput = e => handleBreedInput(e,animal,list)
+                }
+            }
+            typeSelect.onclick = async e => {
+                // remove lis 
+                if(+e.currentTarget.value === 0){
+                    let breedSelect = [...e.currentTarget.parentElement.children].find(x=>x.id =='breed-input')
+                    // if(e.currentTarget.parentElement.children[0].children.length > 0){
+                    // let children;
+                    // children = [...ul.children].map(x=>x.remove()); // remove lis from ul onchange
+                    // }
+                    let currentBreed = await getBreeds(e.currentTarget.value);
+                    let {list, animal} = currentBreed;
+
+                    // activate ul and store lis of breeds
+                    //  create lis
+                    for(let i = 0; i < list.length; i++){
+                        let li = addRows(ul,i,animal,list)
+                        // li onclick event
+                        li.onclick = e => {
+                            // console.log(e.currentTarget)
+                            breedSelect.value =  [...e.currentTarget.children].filter(el=>el.textContent).map(x=>x.textContent).join` `
+                            // console.log(breedSelect.value)
                         }
                     }
                     // handle breed input
@@ -503,13 +534,12 @@ function addRows(ul,i,animal,list){
     function handleBreedInput(e,animal,array){
         let key = e.currentTarget.value;
         let regex = new RegExp(key,'gi')
-        console.log(key)
         // console.log(array)
         // sort list based on value(key)
         let mylist;
         switch(true){
             case animal==='snake':
-                console.log(array)
+                // console.log(array)
                 mylist = new Set([...array].map(item => [...item.species]).flat())
             break;
             case animal==='turtle':
@@ -522,7 +552,6 @@ function addRows(ul,i,animal,list){
 
         // console.log(mylist)
         let filtered = [...mylist].filter((x,y)=>regex.test(x))
-        console.log(filtered)
 
     }  
 // navigation
