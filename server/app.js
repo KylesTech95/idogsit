@@ -8,6 +8,7 @@ const path = require('path')
 const cors = require('cors')
 const {pool} = require('./lib/db.js')
 const fs = require('fs');
+const fileupload = require('express-fileupload');
 
 // app.use((req,res,next)=>{
 //     // console.log(pool)
@@ -18,6 +19,7 @@ const fs = require('fs');
 /*-------------------------------------------- *//*-------------------------------------------- */
 // middleware
 app.use(cors())
+app.use(fileupload())
 app.use(express.json()) 
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(require('path').join(__dirname,'../public')))
@@ -26,6 +28,11 @@ app.use(express.static(require('path').join(__dirname,'../public')))
 // routes
 
 // schedule/book
+
+
+// upload pet image
+app.route('/upload/pet').post(uploadPet)
+
 app.route('/book').post((req,res)=>{
     const id = require('crypto').randomBytes(8).toString('hex').slice(-8)
     let vaccination_status = req.body.proof_of_vaccination;
@@ -68,12 +75,12 @@ app.route('/breed/:animal').get(async(req,res)=>{
     const {animal} = req.params;
     const directory = 'lib/animals'
     try{
-        console.log(animals[animal]+"s")
+        // console.log(animals[animal]+"s")
         const readfile = JSON.parse(fs.readFileSync(path.resolve(__dirname,directory,`${animals[animal]+"s"}.json`),{encoding:'utf-8'}));
         if(!readfile){
-            console.log("this is false")
+            // console.log("this is false")
         } else {
-            console.log("file has been read");
+            // console.log("file has been read");
             res.json(readfile)
         }   
     }
@@ -100,3 +107,37 @@ app.listen(port,()=>{
 app.use((req,res)=>{
     res.status(404).send('404 Page not found')
 })
+
+const approvedFileTypes = ['jpeg','jpg','png']
+async function uploadPet(req,res){
+ // upload pet image
+ console.log(req.files);
+// const {file} = req.files;
+// const maxKb = 75;
+// // console.log(file)
+// // console.log(file.mimetype)
+// // console.log(file.size)
+// const buffer = Buffer.from(file.data);
+// const mime = file.mimetype.split('/')[1];
+// console.log(file)
+
+// if(buffer){
+//     if(approvedFileTypes.indexOf(mime)!==-1){
+//         if(file.size <= (maxKb*1000)){
+//             fs.writeFileSync(path.join(__dirname,'output',file.name),buffer,'utf-8');
+//         } else {
+//             res.status(403).send('Error: file is too large');
+//         }
+//     } else {
+//         res.status(403).send('Error: invalid filetype');
+//     }
+// }
+
+
+try{
+    res.json({data:'upload image '})   
+}
+catch(err){
+    throw new Error(err)
+}
+}

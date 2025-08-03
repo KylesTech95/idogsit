@@ -21,6 +21,7 @@
     "crypto": "^1.0.1",
     "dotenv": "^17.2.1",
     "express": "^5.1.0",
+    "express-fileupload": "^1.5.2",
     "jimp": "^1.6.0",
     "live-server": "^1.2.0",
     "mysql": "^2.18.1",

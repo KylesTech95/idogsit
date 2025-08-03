@@ -87,6 +87,9 @@ const petinfoCol = `<div class="petinfo-col">
                     </div>
                 </div>
             </div>
+            <input type="file" id="file-input" form="upload-pet" name="file"/>
+            <!-- The HTML input element's form attribute specifies the form that the <input> element belongs to. -->
+            <img id="file-img"/>
                 </div>`
 let CURRENT_DEVICE = { // current device object with 2 boolean properties
     mobile:false,
@@ -153,8 +156,24 @@ numInput.oninput = e => {
 
     }
 
-}
 
+
+    // add image to pet info
+    document.querySelectorAll('#file-input').forEach(fileinput=>{
+        fileinput.allgood = false;
+        fileinput.onchange = e => {
+            fileinput.allgood = true;
+            const img = document.getElementById('file-img');
+            const form = document.getElementById('upload-pet')
+        
+
+            // post file to server
+             if([...document.querySelectorAll('#file-input')].every(x=>x.allgood===true)){
+                form.submit();
+            }
+    }
+})
+}
 /* ----------------------------------------- */
 // events
 window.onload = () => {
@@ -220,6 +239,7 @@ window.onscroll = (e) => {
         com.classList.remove('com-yellow')
     }
 }
+
 
 // submit form
 let radios = [...document.querySelectorAll('input')].filter(y=>y.type==='radio')
@@ -368,7 +388,7 @@ window.onchange = async() => {
     let ap = allPetInputs
         for(let i = 0; i < ap.length; i++){
             // console.log(ap[i])
-            let typeSelect,breedSelect,name,age, ageSuffix,height, heightMeasure,weight, weightMeasure,// instatiate variables within petinfo-col
+            let fileinp,typeSelect,breedSelect,name,age, ageSuffix,height, heightMeasure,weight, weightMeasure,// instatiate variables within petinfo-col
             ul = ap[i].children[0].children[0];
             ul.classList.add('breed-ul')
             typeSelect = ap[i].children[0].children[2];
@@ -380,13 +400,15 @@ window.onchange = async() => {
             heightMeasure = ap[i].children[3].children[2];
             weight = ap[i].children[3].children[4];
             weightMeasure = ap[i].children[3].children[5];
-            
+            fileinp = [...ap[i].children].find(f=>f.type==='file');
+
             typeSelect.setAttribute('name','type'+(i+1))
             breedSelect.setAttribute('name','breed'+(i+1))
             name.setAttribute('name','name'+(i+1))
             age.setAttribute('name','age'+(i+1))
             height.setAttribute('name','height'+(i+1))
             weight.setAttribute('name','weight'+(i+1))
+            fileinp.setAttribute('name','file'+(i+1))
 
             let delBtn = document.createElement('div')
             delBtn.classList.add('del-btn')
