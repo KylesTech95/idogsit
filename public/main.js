@@ -249,7 +249,7 @@ let payload = {};
 let ageVal;
 form.onsubmit = e => {
     e.preventDefault();
-    let values = [...document.querySelectorAll('input'),...document.querySelectorAll('select')].filter(y=>!/(submit)/ig.test(y.type))
+    let values = [...document.querySelectorAll('input'),...document.querySelectorAll('select'),...document.querySelectorAll('textarea')].filter(y=>!/(submit)/ig.test(y.type))
     // console.log(values);
     let names = values.map(v=>v.name).sort((a,b)=>{
         return Number(a.slice(-1)) - Number(b.slice(-1)) // sort the array
