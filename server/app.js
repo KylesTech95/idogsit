@@ -40,21 +40,15 @@ app.route('/book').post((req,res)=>{
     req.body.proof_of_vaccination = /(false|other)/.test(req.body.proof_of_vaccination) ? !!(!req.body.proof_of_vaccination) : !!(req.body.proof_of_vaccination)
     req.body.quantity = +(req.body.quantity)
 
-    console.log(req.body);
     const booking_details = {
         id,
         ...req.body,
         booking_time:Date.now(),
         booking_date:new Date(Date.now()).toLocaleDateString(),
     }
-    console.log(booking_details)
+    console.log(booking_details) 
 
-    // res.send(booking_details)
-    const submission = require('path').join(__dirname,'../public','submission.html')
-        
-        // redirect to submission.html
-        // res.redirect(submission)
-        res.json(booking_details)
+    res.json(booking_details)
 })
 
 // booking submission

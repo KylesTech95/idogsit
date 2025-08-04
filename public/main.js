@@ -251,27 +251,38 @@ form.onsubmit = e => {
     e.preventDefault();
     let values = [...document.querySelectorAll('input'),...document.querySelectorAll('select')].filter(y=>!/(submit)/ig.test(y.type))
     // console.log(values);
-    let names = values.map(v=>v.name)
+    let names = values.map(v=>v.name).sort((a,b)=>{
+        return Number(a.slice(-1)) - Number(b.slice(-1)) // sort the array
+    })
+
     console.log(names)
-    for(let i = 0; i < values.length; i++){
-        let name = values.name;
-        console.log(name)
-        // payload[name] = values.type=='number' ? +values.value : values.value;
+    // iterate through names (formatted)
+    for(let i = 0; i < names.length; i++){
+        // if propertyName === the value's name attribute
+        // console.log(values[i])
+        if(names.indexOf(values[i].name)!==-1){
+            // payload.propertyName = the value's value
+            // console.log({prop:values[i].name,val:values[i].value})
+            payload[values[i].name] = values[i].value
+        }
     }
-        // if files are uploaded
-    //     if([...document.querySelectorAll('#file-input')].every(x=>x.allgood===true)){
-    //         // submit file form
-    //         // fileForm.submit();
-    //         // submit booking
-    //         postFetch('/book',payload)
-    //         setTimeout(()=>{
-    //             window.location.href = window.location.origin + "/book/submission"
-    //         },1000)
-    // } else {
-    //     let novalue = [...document.querySelectorAll('#file-input')].filter(noval => !noval.value)
-    //     console.log("NO VALUE!")
-    //     console.log(novalue)
-    // }
+    // console.log("PAYLOAD:\n")
+    // console.log(payload);
+    // if files are uploaded
+        if([...document.querySelectorAll('#file-input')].every(x=>x.allgood===true)){
+            const fileForm = document.getElementById('upload-pet');
+            // submit file form
+            fileForm.submit();
+            // submit booking
+            postFetch('/book',payload)
+            setTimeout(()=>{
+                window.location.href = window.location.origin + "/book/submission"
+            },1000)
+    } else {
+        let novalue = [...document.querySelectorAll('#file-input')].filter(noval => !noval.value)
+        console.log("NO VALUE!")
+        console.log(novalue)
+    }
 }
 /* ----------------------------------------- */
 // check if mobile device
