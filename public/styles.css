@@ -312,7 +312,48 @@ animation: catanimate 2.5s forwards;
     margin-right:0px;
 
 }
-
+.owner-container{
+    width:100%;
+    display:flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+}
+.owner-container>div.input-div{
+    width:75%;
+    display:flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content:center;
+    gap:.5rem;
+    /* border:2px solid red; */
+}
+.owner-container>div.input-div>div{
+    display:flex;
+    /* border:2px solid rgb(134, 229, 8); */
+    width:100%;
+    flex-direction: row;
+    align-items: center;
+    justify-content: left;
+    gap:1rem;
+}
+.owner-container>div.input-div>div>input{
+    font-size:14pt;
+    padding:.5rem;
+    outline:none;
+    box-shadow: 0 8px 12px .9px #333;
+    border:none;
+}
+.owner-container>div.input-div>div>label{
+    font-family: var(--font-family-tertiary);
+    font-size:18pt;
+    background-color:var(--col-tint);
+    color:var(--col-shade);
+    padding:8px;
+}
+#notes-textarea{
+    padding:.5rem .5rem 0 .5rem;
+}
 
 #services-id,#book-id,#gallery-id{
     /* height:500px; */
@@ -396,8 +437,11 @@ font-family: var(--font-family-tertiary);
 font-size:26pt;
 position:relative;
 }
-
-.form-title>h1{
+#owner-title{
+    border:.5px solid #000;
+}
+.form-title>h1,
+#owner-title>h1{
 font-family: var(--font-family-tertiary);
 text-align: center;
 width:100%;
@@ -680,6 +724,10 @@ background:var(--col-tint);
 @media screen and (max-width:600px) {
  .enlarge-list-container{ 
     gap:unset;
+}
+.owner-container>div.input-div{
+    flex-direction: column;
+    width:100%;
 }
     .col-info>p{
         font-size:32pt;

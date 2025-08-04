@@ -40,6 +40,8 @@ app.route('/book').post((req,res)=>{
     req.body.proof_of_vaccination = /(false|other)/.test(req.body.proof_of_vaccination) ? !!(!req.body.proof_of_vaccination) : !!(req.body.proof_of_vaccination)
     req.body.quantity = +(req.body.quantity)
 
+    console.log(req.body)
+    
     const booking_details = {
         id,
         ...req.body,
