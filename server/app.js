@@ -9,6 +9,8 @@ const cors = require('cors')
 const {pool} = require('./lib/db.js')
 const fs = require('fs');
 const fileupload = require('express-fileupload');
+const {gzip, ungzip} = require('node-gzip');
+const { gunzip } = require('zlib')
 
 // app.use((req,res,next)=>{
 //     // console.log(pool)
@@ -35,12 +37,12 @@ app.route('/upload/pet').post(uploadPet)
 
 app.route('/book').post((req,res)=>{
     const id = require('crypto').randomBytes(8).toString('hex').slice(-8)
-    let vaccination_status = req.body.proof_of_vaccination;
     req.body.proof_of_vaccination = /(false|other)/.test(req.body.proof_of_vaccination) ? !!(!req.body.proof_of_vaccination) : !!(req.body.proof_of_vaccination)
     req.body.quantity = +(req.body.quantity)
+
+    console.log(req.body);
     const booking_details = {
         id,
-        vaccination_status,
         ...req.body,
         booking_time:Date.now(),
         booking_date:new Date(Date.now()).toLocaleDateString(),
@@ -111,31 +113,46 @@ app.use((req,res)=>{
 const approvedFileTypes = ['jpeg','jpg','png']
 async function uploadPet(req,res){
  // upload pet image
- console.log(req.files);
-// const {file} = req.files;
-// const maxKb = 75;
-// // console.log(file)
-// // console.log(file.mimetype)
-// // console.log(file.size)
-// const buffer = Buffer.from(file.data);
-// const mime = file.mimetype.split('/')[1];
-// console.log(file)
+//  console.log(req.files);
+const maxKb = 75;
+let files = {};
+files = {...req.files};
 
-// if(buffer){
-//     if(approvedFileTypes.indexOf(mime)!==-1){
-//         if(file.size <= (maxKb*1000)){
-//             fs.writeFileSync(path.join(__dirname,'output',file.name),buffer,'utf-8');
-//         } else {
-//             res.status(403).send('Error: file is too large');
-//         }
-//     } else {
-//         res.status(403).send('Error: invalid filetype');
+// for let i
+let objectFiles = Object.keys(files)
+let error;
+// for(let i = 0; i < objectFiles.length; i++){
+//     let current = files[objectFiles[i]];
+//     if(current){
+//         console.log(current.name)
+//         console.log(current.data)
 //     }
+
+//     fs.writeFileSync(path.resolve(__dirname,'output',current.name),current.data,'utf-8')
 // }
+
+// for prop in
+for(const prop in req.files){
+    console.log(req.files[prop])
+    if(req.files[prop].size <= (maxKb*1000)){
+        if(approvedFileTypes.indexOf(req.files[prop].mimetype.split`/`[1]) !== -1){
+            let compressed = await gzip(req.files[prop].data); // send to s3 bucket
+            console.log(compressed)
+            // test - send files to output dir
+            // fs.writeFile(path.resolve(__dirname,'output',req.files[prop].name),req.files[prop].data,'utf-8',(err,done)=>{
+            //     return err ? console.error(err) : done;
+            // });
+        } else {
+            error = 'File type is not approved'
+        }
+    } else {
+        error = 'file size is too large'
+    }
+}
 
 
 try{
-    res.json({data:'upload image '})   
+    return error ? res.send('error present.') : res.json({data:'upload image'})   
 }
 catch(err){
     throw new Error(err)

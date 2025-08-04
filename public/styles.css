@@ -659,6 +659,23 @@ background:var(--col-tint);
     height:50px;
     padding:.5rem .75rem;
 }
+#file-input{
+    background:#fff;
+    padding:.5rem;
+    border:.5px solid var(--col-tint)
+}
+#file-input::file-selector-button{
+    bordeR:none;
+    background:var(--col-shade);
+    color:var(--col-tint);
+    outline:none;
+    font-family: var(--font-family-tertiary);
+    font-size:14pt;
+    background:var(--col-shade);
+}
+#file-input::target-text{
+    display:none;
+}
 /* media queries */
 @media screen and (max-width:600px) {
  .enlarge-list-container{ 

@@ -72,17 +72,17 @@ const petinfoCol = `<div class="petinfo-col">
                         <!-- yes -->
                         <div>
                             <label for="proof_of_vaccination">YES</label>
-                            <input type="radio" value="true" name="proof_of_vaccination" id="proof-yes"required>
+                            <input type="radio" value="true" name="pov" id="proof-yes"required>
                         </div>
                         <!-- no -->
                         <div>
                             <label for="proof_of_vaccination">NO</label>
-                            <input type="radio" value="false" name="proof_of_vaccination" id="proof-no"required>
+                            <input type="radio" value="false" name="pov" id="proof-no"required>
                         </div>
                         <!-- other -->
                         <div>
                             <label for="proof_of_vaccination">OTHER</label>
-                            <input type="radio" value="other" name="proof_of_vaccination" id="proof-other"required>
+                            <input type="radio" value="other" name="pov" id="proof-other"required>
                         </div>
                     </div>
                 </div>
@@ -91,6 +91,8 @@ const petinfoCol = `<div class="petinfo-col">
             <!-- The HTML input element's form attribute specifies the form that the <input> element belongs to. -->
             <img id="file-img"/>
                 </div>`
+let formTimer;
+let lockQuantity = false;
 let CURRENT_DEVICE = { // current device object with 2 boolean properties
     mobile:false,
     desk:true
@@ -167,10 +169,10 @@ numInput.oninput = e => {
             const form = document.getElementById('upload-pet')
         
 
-            // post file to server
-             if([...document.querySelectorAll('#file-input')].every(x=>x.allgood===true)){
-                form.submit();
-            }
+            // // post file to server
+            //  if([...document.querySelectorAll('#file-input')].every(x=>x.allgood===true)){
+            //     form.submit();
+            // }
     }
 })
 }
@@ -243,23 +245,33 @@ window.onscroll = (e) => {
 
 // submit form
 let radios = [...document.querySelectorAll('input')].filter(y=>y.type==='radio')
-const payload = {startDate:undefined,endDate:undefined,age:undefined,quantity:undefined,proof_of_vaccination:undefined}
+let payload = {};
 let ageVal;
 form.onsubmit = e => {
     e.preventDefault();
-    let currentCheckedRadio = radios.find(r=>r.checked)
-    // console.log(currentCheckedRadio.value)
-    // postFetch('/book/submission',{data:[...document.querySelectorAll('input')].map(v=>v.value)})
-    let values = [...document.querySelectorAll('input')].filter(y=>!/(radio|submit)/ig.test(y.type)).map(v=>v.value).concat(currentCheckedRadio.value);
-    payload.startDate = values[0]
-    payload.endDate = values[1]
-    payload.quantity = values[2]
-    payload.proof_of_vaccination = values[3]
-
-    postFetch('/book',payload)
-    setTimeout(()=>{
-        window.location.href = window.location.origin + "/book/submission"
-    },1000)
+    let values = [...document.querySelectorAll('input'),...document.querySelectorAll('select')].filter(y=>!/(submit)/ig.test(y.type))
+    // console.log(values);
+    let names = values.map(v=>v.name)
+    console.log(names)
+    for(let i = 0; i < values.length; i++){
+        let name = values.name;
+        console.log(name)
+        // payload[name] = values.type=='number' ? +values.value : values.value;
+    }
+        // if files are uploaded
+    //     if([...document.querySelectorAll('#file-input')].every(x=>x.allgood===true)){
+    //         // submit file form
+    //         // fileForm.submit();
+    //         // submit booking
+    //         postFetch('/book',payload)
+    //         setTimeout(()=>{
+    //             window.location.href = window.location.origin + "/book/submission"
+    //         },1000)
+    // } else {
+    //     let novalue = [...document.querySelectorAll('#file-input')].filter(noval => !noval.value)
+    //     console.log("NO VALUE!")
+    //     console.log(novalue)
+    // }
 }
 /* ----------------------------------------- */
 // check if mobile device
@@ -356,19 +368,17 @@ function disableItem(item,id){
 
 }
 let allinputs = [...document.querySelectorAll('input')]//.filter(x=>x.id!==startDate.id && x.id!==numInput.id);
-let formTimer;
 function clearInputs(){
     return allinputs.map(x=>x.value = '');
 }
 
-let lockQuantity = false;
 // quantity enable
-    quantityEnable.onclick = e => {
-        console.log(e.currentTarget);
-        lockQuantity = false;
-        numInput.removeAttribute('disabled');
-        quantityEnable.classList.add('hidden')
-    }
+quantityEnable.onclick = e => {
+    console.log(e.currentTarget);
+    lockQuantity = false;
+    numInput.removeAttribute('disabled');
+    quantityEnable.classList.add('hidden')
+}
 
 // pet age -> icon/size
 window.onchange = async() => {
@@ -388,7 +398,7 @@ window.onchange = async() => {
     let ap = allPetInputs
         for(let i = 0; i < ap.length; i++){
             // console.log(ap[i])
-            let fileinp,typeSelect,breedSelect,name,age, ageSuffix,height, heightMeasure,weight, weightMeasure,// instatiate variables within petinfo-col
+            let proofs, proofContainer, fileinp,typeSelect,breedSelect,name,age, ageSuffix,height, heightMeasure,weight, weightMeasure,// instatiate variables within petinfo-col
             ul = ap[i].children[0].children[0];
             ul.classList.add('breed-ul')
             typeSelect = ap[i].children[0].children[2];
@@ -401,6 +411,13 @@ window.onchange = async() => {
             weight = ap[i].children[3].children[4];
             weightMeasure = ap[i].children[3].children[5];
             fileinp = [...ap[i].children].find(f=>f.type==='file');
+            proofContainer = [...ap[i].children].find(con=>con.id==='proof-container');
+            let proofCol = proofContainer.children[0];
+            let radioContainer = [...proofCol.children[0].children] // div
+            console.log(radioContainer);      
+            proofs = [...radioContainer].map(x=>x.children[1])
+            proofs.forEach(proof=>proof.setAttribute('name','pov'+(i+1)));
+            console.log(proofs)      
 
             typeSelect.setAttribute('name','type'+(i+1))
             breedSelect.setAttribute('name','breed'+(i+1))
@@ -409,12 +426,15 @@ window.onchange = async() => {
             height.setAttribute('name','height'+(i+1))
             weight.setAttribute('name','weight'+(i+1))
             fileinp.setAttribute('name','file'+(i+1))
+            ageSuffix.setAttribute('name','select-input-age'+(i+1))
+            heightMeasure.setAttribute('name','select-input-height'+(i+1))
+            weightMeasure.setAttribute('name','select-input-weight'+(i+1))
 
             let delBtn = document.createElement('div')
             delBtn.classList.add('del-btn')
             delBtn.textContent = "X";
             ap[i].append(delBtn)
-            console.log(ap[i])
+            // console.log(ap[i])
 
             // verify variable placements
             // console.log(typeSelect)
@@ -548,34 +568,34 @@ function addRows(ul,i,animal,list){
     return li
 }
 // get breeds fn
-    async function getBreeds(value){
-        let breeds = await fetch('/breed/'+value).then(r=>r.json()).then(d=>d);
-        return breeds;
+async function getBreeds(value){
+    let breeds = await fetch('/breed/'+value).then(r=>r.json()).then(d=>d);
+    return breeds;
+}
+
+function handleBreedInput(e,animal,array){
+    let key = e.currentTarget.value;
+    let regex = new RegExp(key,'gi')
+    // console.log(array)
+    // sort list based on value(key)
+    let mylist;
+    switch(true){
+        case animal==='snake':
+            // console.log(array)
+            mylist = new Set([...array].map(item => [...item.species]).flat())
+        break;
+        case animal==='turtle':
+            mylist = [...array].map(item => item.type + " " + item.name)
+        break;
+        default:
+        mylist = array.map(item => item);
+        break;
     }
 
-    function handleBreedInput(e,animal,array){
-        let key = e.currentTarget.value;
-        let regex = new RegExp(key,'gi')
-        // console.log(array)
-        // sort list based on value(key)
-        let mylist;
-        switch(true){
-            case animal==='snake':
-                // console.log(array)
-                mylist = new Set([...array].map(item => [...item.species]).flat())
-            break;
-            case animal==='turtle':
-                mylist = [...array].map(item => item.type + " " + item.name)
-            break;
-            default:
-            mylist = array.map(item => item);
-            break;
-        }
+    // console.log(mylist)
+    let filtered = [...mylist].filter((x,y)=>regex.test(x))
 
-        // console.log(mylist)
-        let filtered = [...mylist].filter((x,y)=>regex.test(x))
-
-    }  
+}  
 // navigation
 /*------------------------------------------------------------------- */
 updateNavigator('gallery','disable')
