@@ -6,50 +6,93 @@ const app = express()
 const port = process.env.PORT||3033
 const path = require('path')
 const cors = require('cors')
-const {pool} = require('./lib/db.js')
+const {pool, testConnection} = require('./lib/db.js')
 const fs = require('fs');
 const fileupload = require('express-fileupload');
 const {gzip, ungzip} = require('node-gzip');
-const { gunzip } = require('zlib')
-
-// app.use((req,res,next)=>{
-//     // console.log(pool)
-//     const current_path = req.path;
-//     console.log(current_path)
-//     next()
-// })
+const cookieSession = require('cookie-session')
+const session = require('express-session');
+const MySQLStore = require('express-mysql-session')(session)
+const animals = ['dog','cat','rabbit','turtle','snake']
+const times = ['years','months','weeks']
+const measurements = {
+    height:['cm','in'],
+    weight:['lbs','kg'],
+}
+const sessionStoreOptions = {
+    clearExpired: true, // Auto-clean expired sessions
+    checkExpirationInterval: 900000, // How frequently to check for expired sessions (in ms)
+    expiration: 86400000, // The maximum age of a session (in ms)
+    endConnectionOnClose: true // Close the connection when the store is closed
+}
+// Create the MySQL session store
+const sessionStore = new MySQLStore(sessionStoreOptions, pool);
 /*-------------------------------------------- *//*-------------------------------------------- */
 // middleware
+app.use(session({
+    secret: process.env.SESSIONKEY||'secret-key', // Used to sign the session ID cookie
+    resave: false,
+    saveUninitialized: true,
+    store:sessionStore,
+    cookie: { secure: false, httpOnly:true, maxAge:1800000, sameSite:'strict', } // Use secure cookies in production
+}));
+// app.use(cookieSession({
+//   name: 'session',
+//   keys:['key1','key2'],
+//   // Cookie Options
+//   maxAge: 1800000,
+//   secure:false,
+// }))
+
 app.use(cors())
 app.use(fileupload())
 app.use(express.json()) 
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(require('path').join(__dirname,'../public')))
+
+app.use((req,res,next)=>{
+    console.log(req.session)
+    next();
+})
+/* --------destroy cookie ----------- */
+// app.use(destroySession)
+// function destroySession(req,res,next){
+//     req.session = null;
+//     next();
+// }
 /*-------------------------------------------- *//*-------------------------------------------- */
 
 // routes
 
-// schedule/book
-
-
 // upload pet image
 app.route('/upload/pet').post(uploadPet)
 
-app.route('/book').post((req,res)=>{
+// book
+app.route('/book').post(async(req,res)=>{
+    // await getAllFrom('pets',0,pool);
+    // await getAllFrom('owners',1,pool);
     const id = require('crypto').randomBytes(8).toString('hex').slice(-8)
     req.body.proof_of_vaccination = /(false|other)/.test(req.body.proof_of_vaccination) ? !!(!req.body.proof_of_vaccination) : !!(req.body.proof_of_vaccination)
-    req.body.quantity = +(req.body.quantity)
+    req.body.quantity = +(req.body.quantity);
 
-    console.log(req.body)
-    
-    const booking_details = {
+    let booking_details = {
         id,
         ...req.body,
+        ...req.files,
         booking_time:Date.now(),
         booking_date:new Date(Date.now()).toLocaleDateString(),
     }
-    console.log(booking_details) 
 
+    for(let i in booking_details){
+        let type = 'type';
+        if(new RegExp(type,'gi').test(i)){
+            let val = +booking_details[i]
+            let prop = 'animal'+i
+            console.log(animals[val]);
+            booking_details[prop] = animals[val];
+        }
+    }
+    console.log(booking_details) 
     res.json(booking_details)
 })
 
@@ -68,6 +111,7 @@ app.route('/book/submission').get((req,res)=>{
 
 // get breeds by animal param
 
+// get breed by animal
 app.route('/breed/:animal').get(async(req,res)=>{
     let animals = ['dog','cat','rabbit','turtle','snake']
     const {animal} = req.params;
@@ -103,10 +147,13 @@ app.listen(port,()=>{
 
 // 404
 app.use((req,res)=>{
-    res.status(404).send('404 Page not found')
+    res.status(404).send('404 Page not found');
 })
 
+// approved file types
 const approvedFileTypes = ['jpeg','jpg','png']
+
+// upload pet fn
 async function uploadPet(req,res){
  // upload pet image
 //  console.log(req.files);
@@ -129,11 +176,16 @@ let error;
 
 // for prop in
 for(const prop in req.files){
-    console.log(req.files[prop])
+    let obj = {};
+    // console.log(req.files[prop])
     if(req.files[prop].size <= (maxKb*1000)){
         if(approvedFileTypes.indexOf(req.files[prop].mimetype.split`/`[1]) !== -1){
             let compressed = await gzip(req.files[prop].data); // send to s3 bucket
-            console.log(compressed)
+            obj.gzip = compressed;
+            // transfer file info to object
+            obj.name = req.files[prop].name
+            obj.size = req.files[prop].size
+            obj.md5 = req.files[prop].md5
             // test - send files to output dir
             // fs.writeFile(path.resolve(__dirname,'output',req.files[prop].name),req.files[prop].data,'utf-8',(err,done)=>{
             //     return err ? console.error(err) : done;
@@ -144,13 +196,26 @@ for(const prop in req.files){
     } else {
         error = 'file size is too large'
     }
+
+        console.log(obj)
 }
 
 
 try{
-    return error ? res.send('error present.') : res.json({data:'upload image'})   
+    return error ? res.send('error present.') : res.status(204).end();
 }
 catch(err){
     throw new Error(err)
 }
+}
+
+async function getAllFrom(tablename,rowOrInfo,pool){
+    try{
+        const response = await pool.query(`select * from ${tablename}`);
+        console.log(response[rowOrInfo])
+        return response[rowOrInfo];
+    }   
+    catch(err){
+        throw new Error(err)
+    }
 }

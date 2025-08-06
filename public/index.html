@@ -97,7 +97,7 @@
       </section>
 
     <!-- form -->
-      <form action="/book" id="book-id" method="post">
+      <form action="/book" id="book-id" method="post" enctype="multipart/form-data"> 
         <div id="form-title">
             <h1 id="form-title-h1">Schedule a Sit</h1>
             <!-- <img src="./media/downarrow.png" id="down-arrow" alt="down arrow"> -->
@@ -145,21 +145,21 @@
                 <div class="input-div" class="name-container">
                     <div>
                         <label for="fname">First Name</label>
-                        <input type="text" name="fname" id="fname-id" placeholder="Firstname">
+                        <input type="text" name="fname" id="fname-id" required placeholder="Firstname">
                     </div>
                     <div>
                         <label for="lname">Last Name</label>
-                        <input type="text" name="lname" id="lname-id" placeholder="Lastname">
+                        <input type="text" name="lname" id="lname-id" required placeholder="Lastname">
                     </div>
                 </div>
                 <div class="input-div" class="contact-container">
                     <div>
                         <label for="phone">Phone</label>
-                        <input type="text" id="phone-id" placeholder="Phone">
+                        <input type="text" id="phone-id" required placeholder="Phone">
                     </div>
                     <div>
                         <label for="email">Email</label>
-                        <input type="email" id="emial-id" placeholder="Email">
+                        <input type="email" id="emial-id" required placeholder="Email">
                     </div>
                 </div>
                 <div class="input-div" class="notes-container">

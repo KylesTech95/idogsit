@@ -258,16 +258,11 @@ form.onsubmit = e => {
     console.log(names)
     // iterate through names (formatted)
     for(let i = 0; i < names.length; i++){
-        // if propertyName === the value's name attribute
-        // console.log(values[i])
         if(names.indexOf(values[i].name)!==-1){
             // payload.propertyName = the value's value
-            // console.log({prop:values[i].name,val:values[i].value})
             payload[values[i].name] = values[i].value
         }
     }
-    // console.log("PAYLOAD:\n")
-    // console.log(payload);
     // if files are uploaded
         if([...document.querySelectorAll('#file-input')].every(x=>x.allgood===true)){
             const fileForm = document.getElementById('upload-pet');
