@@ -85,22 +85,50 @@ app.route('/book').post(async(req,res)=>{
 
     for(let i in booking_details){
         let type = 'type';
-        let height = 'height';
-        let weight = 'weight';
-        if(new RegExp(type,'gi').test(i)){
+        let height = 'select-input-height';
+        let weight = 'select-input-weight';
+        let array = [type,height,weight]
+
+        for(let j = 0; j < array.length; j++){
+            if(new RegExp(array[j],'gi').test(i)){
             let val = +booking_details[i]
             let prop = 'animal'+i
-            console.log(animals[val]);
-            booking_details[prop] = animals[val];
-        }
-        if(new RegExp(height,'gi').test(i)){
-            let val = +booking_details[i]
-            let prop = 'animal'+i
+            
+            if(array[j]==='type'){
+                booking_details[prop] = animals[val];
+            }
+            if(new RegExp(array[j],'gi').test(height)){
             let measurement = measurements.height[val];
-            console.log(animals[val]);
-            console.log(measurement)
             booking_details[prop] = measurement;
+            }
+            if(new RegExp(array[j],'gi').test(weight)){
+            let measurement = measurements.weight[val];
+            booking_details[prop] = measurement;
+            }
         }
+        }
+        // if(new RegExp(type,'gi').test(i)){
+        //     let val = +booking_details[i]
+        //     let prop = 'animal'+i
+        //     console.log(animals[val]);
+        //     booking_details[prop] = animals[val];
+        // }
+        // if(new RegExp(height,'gi').test(i)){
+        //     let val = +booking_details[i]
+        //     let prop = 'animal'+i
+        //     let measurement = measurements.height[val];
+        //     console.log(animals[val]);
+        //     console.log(measurement)
+        //     booking_details[prop] = measurement;
+        // }
+        // if(new RegExp(weight,'gi').test(i)){
+        //     let val = +booking_details[i]
+        //     let prop = 'animal'+i
+        //     let measurement = measurements.weight[val];
+        //     console.log(animals[val]);
+        //     console.log(measurement)
+        //     booking_details[prop] = measurement;
+        // }
     }
     console.log(booking_details)
     res.json(booking_details)
