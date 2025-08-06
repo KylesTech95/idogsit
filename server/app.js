@@ -85,21 +85,30 @@ app.route('/book').post(async(req,res)=>{
 
     for(let i in booking_details){
         let type = 'type';
+        let height = 'height';
+        let weight = 'weight';
         if(new RegExp(type,'gi').test(i)){
             let val = +booking_details[i]
             let prop = 'animal'+i
             console.log(animals[val]);
             booking_details[prop] = animals[val];
         }
+        if(new RegExp(height,'gi').test(i)){
+            let val = +booking_details[i]
+            let prop = 'animal'+i
+            let measurement = measurements.height[val];
+            console.log(animals[val]);
+            console.log(measurement)
+            booking_details[prop] = measurement;
+        }
     }
-    console.log(booking_details) 
+    console.log(booking_details)
     res.json(booking_details)
 })
 
 // booking submission
 app.route('/book/submission').get((req,res)=>{
         const submission = require('path').join(__dirname,'../public','submission.html')
-        
         // redirect to submission.html
         res.sendFile(submission)
 })
