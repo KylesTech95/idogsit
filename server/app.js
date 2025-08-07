@@ -1,5 +1,8 @@
 require('dotenv').config({
-    path:require('path').resolve(__dirname,'../.env')
+    path:require('path').resolve(__dirname,'../.env'),
+    quiet:true,
+    encoding:'utf8',
+    debug:false,
 })
 const express = require('express')
 const app = express()
@@ -50,10 +53,7 @@ app.use(express.json())
 app.use(express.urlencoded({extended:true}))
 app.use(express.static(require('path').join(__dirname,'../public')))
 
-app.use((req,res,next)=>{
-    console.log(req.session)
-    next();
-})
+
 /* --------destroy cookie ----------- */
 // app.use(destroySession)
 // function destroySession(req,res,next){
@@ -61,7 +61,6 @@ app.use((req,res,next)=>{
 //     next();
 // }
 /*-------------------------------------------- *//*-------------------------------------------- */
-
 // routes
 
 // upload pet image
@@ -110,7 +109,9 @@ app.route('/book').post(async(req,res)=>{
         }
     }
     console.log(booking_details)
-    let booking_object = splitDetailsByNum(booking_details);
+    let formattedObj = splitDetailsByNum(booking_details);
+    console.log("FORMATTED\n")
+    console.log(formattedObj)
     res.json(booking_details)
 })
 
@@ -240,14 +241,16 @@ async function getAllFrom(tablename,rowOrInfo,pool){
 function splitDetailsByNum(details){
     let nums = {};
     for(let i in details){
-        if(/\d$/g.test(i)){
+        if(/[0-9]$/g.test(i)){
             let matchNum = i.match(/\d$/g)
-            nums[matchNum] = {};
+            // console.log(i,matchNum)
+            !nums[matchNum[0]] ? nums[matchNum[0]] = {} : null; // instantiating new object {}
+            nums[matchNum[0]][i] = details[i];
+
         }
         if(!/\d$/g.test(i)){
             nums[i] = details[i]
         }
     }
-    console.log(nums)
     return nums;
 }
