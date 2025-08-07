@@ -89,12 +89,13 @@ app.route('/book').post(async(req,res)=>{
         let weight = 'select-input-weight';
         let array = [type,height,weight]
 
+        // iterate through the array of properties
         for(let j = 0; j < array.length; j++){
             if(new RegExp(array[j],'gi').test(i)){
             let val = +booking_details[i]
             let prop = 'animal'+i
             
-            if(array[j]==='type'){
+            if(new RegExp(array[j],'gi').test(type)){
                 booking_details[prop] = animals[val];
             }
             if(new RegExp(array[j],'gi').test(height)){
@@ -107,30 +108,9 @@ app.route('/book').post(async(req,res)=>{
             }
         }
         }
-        // if(new RegExp(type,'gi').test(i)){
-        //     let val = +booking_details[i]
-        //     let prop = 'animal'+i
-        //     console.log(animals[val]);
-        //     booking_details[prop] = animals[val];
-        // }
-        // if(new RegExp(height,'gi').test(i)){
-        //     let val = +booking_details[i]
-        //     let prop = 'animal'+i
-        //     let measurement = measurements.height[val];
-        //     console.log(animals[val]);
-        //     console.log(measurement)
-        //     booking_details[prop] = measurement;
-        // }
-        // if(new RegExp(weight,'gi').test(i)){
-        //     let val = +booking_details[i]
-        //     let prop = 'animal'+i
-        //     let measurement = measurements.weight[val];
-        //     console.log(animals[val]);
-        //     console.log(measurement)
-        //     booking_details[prop] = measurement;
-        // }
     }
     console.log(booking_details)
+    let booking_object = splitDetailsByNum(booking_details);
     res.json(booking_details)
 })
 
@@ -255,4 +235,19 @@ async function getAllFrom(tablename,rowOrInfo,pool){
     catch(err){
         throw new Error(err)
     }
+}
+
+function splitDetailsByNum(details){
+    let nums = {};
+    for(let i in details){
+        if(/\d$/g.test(i)){
+            let matchNum = i.match(/\d$/g)
+            nums[matchNum] = {};
+        }
+        if(!/\d$/g.test(i)){
+            nums[i] = details[i]
+        }
+    }
+    console.log(nums)
+    return nums;
 }
