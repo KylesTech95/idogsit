@@ -1,0 +1,18 @@
+{
+    "tables":{
+    "pets": {
+      "name": "undefined",
+      "age": "undefined",
+      "weight": "undefined",
+      "height": "undefined",
+      "breed": "undefined"
+    },
+    "owners": { "firstname": "undefined", "lastname": "undefined", "phone": "undefined" },
+    "bookings": {
+      "pid": "undefined",
+      "oid": "undefined",
+      "booking_date": "undefined",
+      "booking_time": "undefined"
+    }
+  }
+}

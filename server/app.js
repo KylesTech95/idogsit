@@ -4,6 +4,7 @@ require("dotenv").config({
   encoding: "utf8",
   debug: false,
 });
+const {create} = require('./lib/mysql.js')
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3033;
@@ -74,7 +75,7 @@ app.use(express.static(require("path").join(__dirname, "../public")));
 // upload pet image
 app.route("/upload/pet").post(uploadPet);
 
-// book
+//write booking to server
 app.route("/book").post(async (req, res) => {
     // check if bookings folder exists
   if (!fs.existsSync(path.resolve(__dirname, "bookings"))) {
@@ -144,6 +145,7 @@ app.route("/book").post(async (req, res) => {
   let filePathToJSON = `${submission}.${formatDateSubmission}.${formatCustomer}.json`
 
     fs.writeFileSync(path.resolve(path.join(__dirname,'bookings',filePathToJSON)),payload,'utf-8')
+    
   // response in json format
   res.json(formattedObj);
 });
@@ -200,17 +202,23 @@ app.route("/breed/:animal").get(async (req, res) => {
 
 // listen
 
+
+
+
+/* --------------------------------listen on server------------------------------- */
+
 app.listen(port, () => {
   console.log("Server is running on port " + port);
 });
+/* --------------------------------listen on server------------------------------- */
 
+
+/* --------------------------------page not found------------------------------- */
 // 404
 app.use((req, res) => {
   res.status(404).send("404 Page not found");
 });
-
-
-
+/* --------------------------------page not found------------------------------- */
 
 // upload pet fn
 async function uploadPet(req, res) {
@@ -291,21 +299,30 @@ function splitDetailsByNum(details) {
   }
   return nums;
 }
-function migrateBookingsToCustomerDir(array,destination){
-    if(array && path){
-        array.map((x,idx)=>{
-            // fs.mv will not remove the old path
-            // use renameSync or a combination of copyFileSync and unlinkSync
-            // first give execute privileges
-            fs.renameSync(path.resolve(__dirname,'bookings',x),`${destination}/${x.replace(/(.json)$/g,`${array.length-idx}$1`)}`)
-        })
-        return true;
-    } else {
-        console.log('check your arguments')
-        return false;
-    }
-}
 function validateProperties(input,compare){
     compare = JSON.parse(compare);
     return compare.fname === input.fname && compare.lname === input.lname && compare.email === input.email
 }
+function storePet(jsonFile){
+  for(let i in jsonFile){
+    if(/^\d*$/.test(i)){
+      console.log(jsonFile[i])
+    }
+  }
+}
+function storeOwner(jsonFile){
+for(let i in jsonFile){
+    if(!/^\d*$/.test(i)){
+      console.log(jsonFile[i])
+      console.log(i+" : " + jsonFile[i])
+    }
+  }
+}
+
+let d,f,j;
+d = fs.readdirSync(path.resolve(__dirname,'bookings'),'utf8');
+f = fs.readFileSync(path.resolve(__dirname,'bookings',d[0]),'utf8');
+j = JSON.parse(f)[0];
+
+storePet(j)
+storeOwner(j)
