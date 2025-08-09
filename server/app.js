@@ -4,7 +4,11 @@ require("dotenv").config({
   encoding: "utf8",
   debug: false,
 });
-const {create} = require('./lib/mysql.js')
+const {create,read} = require('./lib/mysql.js')
+// read('owners')
+// read('pets')
+let reading = read('bookings')
+console.log(reading)
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3033;
@@ -77,6 +81,7 @@ app.route("/upload/pet").post(uploadPet);
 
 //write booking to server
 app.route("/book").post(async (req, res) => {
+
     // check if bookings folder exists
   if (!fs.existsSync(path.resolve(__dirname, "bookings"))) {
     // create bookings folder
@@ -146,6 +151,9 @@ app.route("/book").post(async (req, res) => {
 
     fs.writeFileSync(path.resolve(path.join(__dirname,'bookings',filePathToJSON)),payload,'utf-8')
     
+    // pull json data from server (/bookings)
+    const jsonFile = pullJsonData('bookings',filePathToJSON);
+    console.log(jsonFile)
   // response in json format
   res.json(formattedObj);
 });
@@ -266,7 +274,7 @@ async function uploadPet(req, res) {
       error = "file size is too large";
     }
 
-    console.log(obj);
+    // console.log(obj); 
   }
 
   try {
@@ -278,7 +286,7 @@ async function uploadPet(req, res) {
 async function getAllFrom(tablename, rowOrInfo, pool) {
   try {
     const response = await pool.query(`select * from ${tablename}`);
-    console.log(response[rowOrInfo]);
+    // console.log(response[rowOrInfo]);
     return response[rowOrInfo];
   } catch (err) {
     throw new Error(err);
@@ -314,15 +322,23 @@ function storeOwner(jsonFile){
 for(let i in jsonFile){
     if(!/^\d*$/.test(i)){
       console.log(jsonFile[i])
-      console.log(i+" : " + jsonFile[i])
+    //   console.log(i+" : " + jsonFile[i])
     }
   }
 }
 
-let d,f,j;
-d = fs.readdirSync(path.resolve(__dirname,'bookings'),'utf8');
-f = fs.readFileSync(path.resolve(__dirname,'bookings',d[0]),'utf8');
-j = JSON.parse(f)[0];
+function storeBooking(jsonFile){
+    // method to store booking
+    return null;
+}
 
-storePet(j)
-storeOwner(j)
+function pullJsonData(directory,filename){
+    let d,f,j;
+    d = fs.readdirSync(path.resolve(__dirname,directory),'utf8');
+    f = fs.readFileSync(path.resolve(__dirname,directory,filename),'utf8');
+    j = JSON.parse(f);
+    return j; // return array
+}
+
+// storePet(j)
+// storeOwner(j)

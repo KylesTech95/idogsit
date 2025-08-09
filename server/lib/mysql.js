@@ -1,6 +1,6 @@
 const { pool } = require("./db.js");
 const {tables} = require('./tables.json')
-console.log(tables)
+// console.log(tables)
 // mysql database class
 class Mysql {
     constructor(table, args) {
@@ -27,7 +27,24 @@ class Mysql {
     require("process").exit(1);
     }
     async read(fn){
-    return null;
+      if(fn){
+        // method
+        return fn
+      } else {
+        // store args into params variable
+        // let params = this.args;
+        // let [keys, values] = [Object.keys(params), Object.values(params)];
+
+        // query
+        console.log("pool query Begin...");
+        // pool the database and insert data with params
+        const query = await pool.query(
+            `SELECT * from ${this.table}`);
+        console.log("pool query complete.");
+        // require("process").exit(1);
+        const [rows,information] = [...query];
+        return 'test'
+      }
     }
     async update(){
     return null;
@@ -102,7 +119,17 @@ function create(table, args = {}) {
     throw new Error(err);
   }
 }
-
+function read(table, args = {}){
+  let istrue = false; // boolean - if true, move to try/catch
+  // switch table columns/values based on table {}
+    let mysql = new Mysql(table,undefined);
+    
+  if(tables.hasOwnProperty(table)){
+    return mysql.read()
+  } else {
+      console.error("Something went wrong..." + mysql.err(errMessage));
+  }
+}
 
 /* ---------------------- create ---------------------- */
 // // true positive
@@ -123,4 +150,4 @@ function create(table, args = {}) {
 
 /* ---------------------- delete ---------------------- */
 
-module.exports = { create };
+module.exports = { create, read};
