@@ -86,9 +86,10 @@ app.route("/book").post(async (req, res) => {
     fs.mkdirSync(path.resolve(__dirname, "bookings"));
   }
 
-  // await getAllFrom('pets',0,pool);
-  // await getAllFrom('owners',1,pool);
-  const id = require("crypto").randomBytes(8).toString("hex").slice(-8);
+  // get list of owners by id
+  const ownerIdList = await getOwners(pool)
+  console.log(ownerIdList)
+  const id = await generateId(ownerIdList);
   req.body.proof_of_vaccination = /(false|other)/.test(
     req.body.proof_of_vaccination
   )
@@ -100,6 +101,8 @@ app.route("/book").post(async (req, res) => {
     return x < 10 ? '0'+x : x
 }).reverse().join`/`;
 
+
+/*-----------------------------*/
     // make booking details obj
   let booking_details = {
     id,
@@ -108,6 +111,9 @@ app.route("/book").post(async (req, res) => {
     booking_time: Date.now(),
     booking_date: formatDate,
   };
+/*-----------------------------*/
+
+
    // iterate through details object
   for (let i in booking_details) {
     let type = "type";
@@ -151,7 +157,8 @@ app.route("/book").post(async (req, res) => {
 
     // pull json data from server (/bookings)
     const jsonFile = pullJsonData('bookings',filePathToJSON);
-    console.log(jsonFile)
+    console.log(jsonFile);
+
   // response in json format
   res.json(formattedObj);
 });
@@ -336,26 +343,49 @@ function pullJsonData(directory,filename){
     j = JSON.parse(f);
     return j; // return array
 }
-
+async function generateId(list){
+  let id = require('crypto').randomBytes(16).toString('hex').slice(-8);
+  // const id = 'd938rn34frn'
+  // const id = '2b8f7aad'
+  try{
+    if(!list.includes(id)){
+      return id;
+    } else {
+       return generateId(list)
+    }
+  }
+  catch(err){
+    throw new Error(err)
+  }
+}
 
 /* ---------- new Promise to resolve ---------- */
- // resolve inner
-  let inner = new Promise(resolve => {
-    // resolve(read('pets'))
-    setTimeout(()=> resolve(read('pets')),1000)
-    // resolve(read('bookings'))
-  })
+//  // resolve inner
+//   let inner = new Promise(resolve => {
+//     // resolve(read('pets'))
+//     setTimeout(()=> resolve(read('pets')),1000)
+//     // resolve(read('bookings'))
+//   })
 
-  // resolve outer
-  let outter = new Promise(resolve => {
-      setTimeout(()=> resolve(inner),1000)
-  })
+//   // resolve outer
+//   let outter = new Promise(resolve => {
+//       setTimeout(()=> resolve(inner),1000)
+//   })
 
-  // then
-  const response = outter.then(value => {
-    // console.log(value)
-    console.log(value.information)
-    console.log("\n")
-    console.log(value.rows);
-    return value;
-  })
+//   // then
+//   const response = outter.then(value => {
+//     // console.log(value)
+//     console.log(value.information)
+//     console.log("\n")
+//     console.log(value.rows);
+//     return value;
+//   })
+
+async function getOwners(pool){
+  const currentOwners = await pool.query('select oid from owners;');
+  const [rows,info] = currentOwners;
+  const mapIds = [...rows].map(o => o['oid']);
+  // console.log(rows)
+  // console.log(mapIds)
+  return mapIds
+}
