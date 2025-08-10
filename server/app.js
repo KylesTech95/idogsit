@@ -5,8 +5,6 @@ require("dotenv").config({
   debug: false,
 });
 const {create,read} = require('./lib/mysql.js')
-// read('owners')
-// read('pets')
 let reading = read('bookings')
 console.log(reading)
 const express = require("express");
@@ -23,7 +21,7 @@ const session = require("express-session");
 const MySQLStore = require("express-mysql-session")(session);
 const animals = ["dog", "cat", "rabbit", "turtle", "snake"];
 const times = ["years", "months", "weeks"];
-// approved file types
+// approved file types`
 const approvedFileTypes = ["jpeg", "jpg", "png"];
 const measurements = {
   height: ["cm", "in"],
@@ -150,7 +148,7 @@ app.route("/book").post(async (req, res) => {
   let filePathToJSON = `${submission}.${formatDateSubmission}.${formatCustomer}.json`
 
     fs.writeFileSync(path.resolve(path.join(__dirname,'bookings',filePathToJSON)),payload,'utf-8')
-    
+
     // pull json data from server (/bookings)
     const jsonFile = pullJsonData('bookings',filePathToJSON);
     console.log(jsonFile)
@@ -274,7 +272,7 @@ async function uploadPet(req, res) {
       error = "file size is too large";
     }
 
-    // console.log(obj); 
+    // console.log(obj);
   }
 
   try {
@@ -331,7 +329,6 @@ function storeBooking(jsonFile){
     // method to store booking
     return null;
 }
-
 function pullJsonData(directory,filename){
     let d,f,j;
     d = fs.readdirSync(path.resolve(__dirname,directory),'utf8');
@@ -340,5 +337,25 @@ function pullJsonData(directory,filename){
     return j; // return array
 }
 
-// storePet(j)
-// storeOwner(j)
+
+/* ---------- new Promise to resolve ---------- */
+ // resolve inner
+  let inner = new Promise(resolve => {
+    // resolve(read('pets'))
+    setTimeout(()=> resolve(read('pets')),1000)
+    // resolve(read('bookings'))
+  })
+
+  // resolve outer
+  let outter = new Promise(resolve => {
+      setTimeout(()=> resolve(inner),1000)
+  })
+
+  // then
+  const response = outter.then(value => {
+    // console.log(value)
+    console.log(value.information)
+    console.log("\n")
+    console.log(value.rows);
+    return value;
+  })

@@ -23,16 +23,15 @@ DROP TABLE IF EXISTS `bookings`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings` (
-  `bid` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `bid` varchar(25) NOT NULL,
   `pid` bigint unsigned DEFAULT NULL,
   `oid` bigint unsigned DEFAULT NULL,
-  PRIMARY KEY (`bid`),
+  `booking_time` time DEFAULT NULL,
+  `booking_date` date DEFAULT NULL,
   UNIQUE KEY `bid` (`bid`),
   KEY `pid` (`pid`),
-  KEY `oid` (`oid`),
-  CONSTRAINT `bookings_ibfk_1` FOREIGN KEY (`pid`) REFERENCES `pets` (`pid`),
-  CONSTRAINT `bookings_ibfk_2` FOREIGN KEY (`oid`) REFERENCES `owners` (`oid`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  KEY `oid` (`oid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -41,7 +40,6 @@ CREATE TABLE `bookings` (
 
 LOCK TABLES `bookings` WRITE;
 /*!40000 ALTER TABLE `bookings` DISABLE KEYS */;
-INSERT INTO `bookings` VALUES (1,2,1),(4,1,1);
 /*!40000 ALTER TABLE `bookings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -53,13 +51,13 @@ DROP TABLE IF EXISTS `owners`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `owners` (
-  `oid` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `oid` varchar(25) NOT NULL,
   `firstname` varchar(25) NOT NULL,
   `lastname` varchar(25) NOT NULL,
   `phone` varchar(16) NOT NULL,
-  PRIMARY KEY (`oid`),
-  UNIQUE KEY `mid` (`oid`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `email` varchar(255) NOT NULL,
+  UNIQUE KEY `email` (`email`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -68,7 +66,7 @@ CREATE TABLE `owners` (
 
 LOCK TABLES `owners` WRITE;
 /*!40000 ALTER TABLE `owners` DISABLE KEYS */;
-INSERT INTO `owners` VALUES (1,'sams','club','343544467');
+INSERT INTO `owners` VALUES ('d938rn34frn','ben','stiller','123-222-3333','bstill@username.com');
 /*!40000 ALTER TABLE `owners` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -80,15 +78,17 @@ DROP TABLE IF EXISTS `pets`;
 /*!40101 SET @saved_cs_client     = @@character_set_client */;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `pets` (
-  `pid` bigint unsigned NOT NULL AUTO_INCREMENT,
+  `pid` varchar(25) NOT NULL,
   `name` varchar(50) NOT NULL,
   `age` float NOT NULL,
   `weight` float DEFAULT NULL,
   `height` float DEFAULT NULL,
   `breed` varchar(50) NOT NULL,
-  PRIMARY KEY (`pid`),
-  UNIQUE KEY `animal_id` (`pid`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+  `height_measurement` varchar(5) DEFAULT NULL,
+  `weight_measurement` varchar(5) DEFAULT NULL,
+  `type` varchar(10) DEFAULT NULL,
+  UNIQUE KEY `uni_pets` (`pid`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
 --
@@ -97,8 +97,32 @@ CREATE TABLE `pets` (
 
 LOCK TABLES `pets` WRITE;
 /*!40000 ALTER TABLE `pets` DISABLE KEYS */;
-INSERT INTO `pets` VALUES (1,'jax',8,90.4,15.5,'hound'),(2,'Saul',12,40.4,10.5,'Boxer');
+INSERT INTO `pets` VALUES ('239jfde4f','ben',3,22.4,12,'rockwhile rabbit','cm','lbs','rabbit');
 /*!40000 ALTER TABLE `pets` ENABLE KEYS */;
+UNLOCK TABLES;
+
+--
+-- Table structure for table `sessions`
+--
+
+DROP TABLE IF EXISTS `sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sessions` (
+  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` int unsigned NOT NULL,
+  `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sessions`
+--
+
+LOCK TABLES `sessions` WRITE;
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
@@ -110,4 +134,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-05 15:17:47
+-- Dump completed on 2025-08-10  6:40:41

@@ -43,7 +43,7 @@ class Mysql {
         console.log("pool query complete.");
         // require("process").exit(1);
         const [rows,information] = [...query];
-        return 'test'
+        return {rows:rows,information:information}
       }
     }
     async update(){
@@ -119,13 +119,13 @@ function create(table, args = {}) {
     throw new Error(err);
   }
 }
-function read(table, args = {}){
+async function read(table, args = {}){
   let istrue = false; // boolean - if true, move to try/catch
   // switch table columns/values based on table {}
     let mysql = new Mysql(table,undefined);
     
   if(tables.hasOwnProperty(table)){
-    return mysql.read()
+    return await mysql.read()
   } else {
       console.error("Something went wrong..." + mysql.err(errMessage));
   }
