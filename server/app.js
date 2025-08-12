@@ -22,7 +22,7 @@ const session = require("express-session");
 const { emitWarning } = require("process");
 const MySQLStore = require("express-mysql-session")(session);
 const animals = ["dog", "cat", "rabbit", "turtle", "snake"];
-const times = ["years", "months", "weeks"];
+const ages = ["years", "months", "weeks"];
 // approved file types`
 const approvedFileTypes = ["jpeg", "jpg", "png"];
 const measurements = {
@@ -129,7 +129,8 @@ app.route("/book").post(async (req, res) => {
     let type = "type";
     let height = "select-input-height";
     let weight = "select-input-weight";
-    let array = [type, height, weight];
+    let age = "select-input-age";
+    let array = [type, height, weight, age];
 
     // iterate through the array of properties
     for (let j = 0; j < array.length; j++) {
@@ -140,16 +141,18 @@ app.route("/book").post(async (req, res) => {
         if (new RegExp(array[j], "gi").test(type)) {
           booking_details[prop] = animals[val];
         }
-        if (new RegExp(array[j], "gi").test(height)) {
+        if (new RegExp(array[j], "gi").test(height) || new RegExp(array[j], "gi").test(weight)) {
           let measurement = measurements.height[val];
           booking_details[prop] = measurement;
         }
-        if (new RegExp(array[j], "gi").test(weight)) {
-          let measurement = measurements.weight[val];
-          booking_details[prop] = measurement;
+        if (new RegExp(array[j], "gi").test(age)) {
+          booking_details[prop] = ages[val];
         }
+        
       }
     }
+
+    
   }
   // console.log(booking_details);
   let formattedObj = splitDetailsByNum(booking_details);
@@ -355,7 +358,7 @@ function validateProperties(input,compare){
 function storePets(jsonFile){
 console.log("STORE PETS - CHECK FILE!");
 // console.log(jsonFile);
-let payload = {}
+let payload = {}, abstract = {}
 jsonFile = (jsonFile[0]);
 console.log(jsonFile);
 
@@ -365,37 +368,43 @@ for(let num in jsonFile){
       for(let prop in object){
           let prp = prop.slice(0,-1);
         // MIGRAGE OWNER INFORMATION FROM FILE TO PAYLOAD
-        if(/^((animal-)?select-input-)/g.test(prp)){
-          prp = prp.replace(/^((animal-)?select-input-)/g,'measurement_')
+        if(/^(animalselect-input-)/g.test(prp)){
+          prp = prp.replace(/^(animalselect-input-)/g,'') + "_measurement"
+        }
+        if(/^(select-input-)/g.test(prp)){
+          prp = prp.replace(/^(select-input-)/g,'') + "_measurement"
+        }
+        if(/animaltype/gi.test(prp)){
+          prp = prp.replace(/animaltype/gi,'aType');
         }
 
         payload[prp] = object[prp]
-
-        // payload[pid] = object[prp].name;
-        // payload[pid] = object[prp].age;
-        // payload[pid] = object[prp].weight;
-        // payload[pid] = object[prp].breed;
-        // payload[pid] = object[prp].height;
-        // payload[pid] = object[prp].height_measurement;
-        // payload[pid] = object[prp].weight_measurement;
-        // payload[pid] = object[prp].type;
+        abstract[prp] = object[prop]
       }
     }
 }
+// delete payload['animalselect-input-weight']
+// delete payload['animalselect-input-height']
+
+// delete abstract['animalselect-input-weight']
+// delete abstract['animalselect-input-height']
+
 console.log(payload);
+console.log(abstract)
+
 
 // payload.pseudo_name = jsonFile.pseudo_name;
 
-// "pid": "",
-// "name": "",
-// "age": "",
-// "weight": "",
-// "height": "",
-// "breed": "",
-// "height_measurement": "",
-// "weight_measurement": "",
-// "type": "",
-// "pseudo_name": ""
+      // "pid": "",
+      // "name": "",
+      // "age": "",
+      // "weight": "",
+      // "height": "",
+      // "breed": "",
+      // "height_measurement": "",
+      // "weight_measurement": "",
+      // "aType": "",
+      // "age_measurement": ""
 
 // INSERT DATA INTO OWNERS TABLE
 // create('pets',payload)

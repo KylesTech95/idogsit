@@ -1,1 +1,30 @@
-{"tables":{"bookings":{"bid":"","pid":"","oid":"","booking_time":"","booking_date":""},"owners":{"oid":"","firstname":"","lastname":"","phone":"","email":""},"pets":{"pid":"","name":"","age":"","weight":"","height":"","breed":"","height_measurement":"","weight_measurement":"","type":"","age_measurement":""}}}
+{
+  "tables": {
+    "bookings": {
+      "bid": "",
+      "pid": "",
+      "oid": "",
+      "booking_time": "",
+      "booking_date": ""
+    },
+    "owners": {
+      "oid": "",
+      "firstname": "",
+      "lastname": "",
+      "phone": "",
+      "email": ""
+    },
+    "pets": {
+      "pid": "",
+      "name": "",
+      "age": "",
+      "weight": "",
+      "height": "",
+      "breed": "",
+      "height_measurement": "",
+      "weight_measurement": "",
+      "aType": "",
+      "age_measurement": ""
+    }
+  }
+}
