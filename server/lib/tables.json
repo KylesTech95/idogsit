@@ -1,28 +1,29 @@
 {
-  "pets": {
-    "pid": "",
-    "name": "",
-    "age": "",
-    "weight": "",
-    "height": "",
-    "breed": "",
-    "height_measurement": "",
-    "weight_measurement": "",
-    "type": "",
-    "test": ""
-  },
-  "owners": {
-    "oid": "",
-    "firstname": "",
-    "lastname": "",
-    "phone": "",
-    "email": ""
-  },
-  "bookings": {
-    "bid": "",
-    "pid": "",
-    "oid": "",
-    "booking_time": "",
-    "booking_date": ""
+  "tables": {
+    "bookings": {
+      "bid": "",
+      "pid": "",
+      "oid": "",
+      "booking_time": "",
+      "booking_date": ""
+    },
+    "owners": {
+      "oid": "",
+      "firstname": "",
+      "lastname": "",
+      "phone": "",
+      "email": ""
+    },
+    "pets": {
+      "pid": "",
+      "name": "",
+      "age": "",
+      "weight": "",
+      "height": "",
+      "breed": "",
+      "height_measurement": "",
+      "weight_measurement": "",
+      "type": ""
+    }
   }
 }

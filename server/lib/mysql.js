@@ -12,6 +12,8 @@ class Mysql {
   async create() {
     // store args into params variable
     let params = this.args;
+    console.log("ARGUMENTS")
+    console.log(this.args)
     let [keys, values] = [Object.keys(params), Object.values(params)];
 
     // query
@@ -26,7 +28,7 @@ class Mysql {
       values
     );
     console.log("pool query complete.");
-    require("process").exit(1);
+    // require("process").exit(1);
   }
   async read() {
     // query
@@ -65,6 +67,7 @@ class Mysql {
 /* ------------------------------------------------------------------ */
 
 // create
+/* ---------------------- create ---------------------- */
 function create(table, args = {}) {
   let istrue = false; // boolean - if true, move to try/catch
   // switch table columns/values based on table {}
@@ -116,21 +119,6 @@ function create(table, args = {}) {
     throw new Error(err);
   }
 }
-async function read(table, args = {}) {
-  let istrue = false; // boolean - if true, move to try/catch
-  // switch table columns/values based on table {}
-  let mysql = new Mysql(table, undefined);
-
-  if (tables.hasOwnProperty(table)) {
-    const obj = await mysql.read();
-    // console.log("RUN READ FN")
-    // console.log(obj)
-    return obj;
-  } else {
-    console.error("Something went wrong..." + mysql.err(errMessage));
-  }
-}
-/* ---------------------- create ---------------------- */
 // true positive
 // create('pets',{name:'shayla',age:1,height:12.5,weight:20,breed:'small-breed'});
 // create('owners',{firstname:'Liam',lastname:'shade',phone:'123-343-1223'});
@@ -142,6 +130,22 @@ async function read(table, args = {}) {
 // create('bookings',{pid:'Liam',dsp:'shade',booking_date:'2025-03-04',time_booking:'12:33:33'});
 
 /* ---------------------- read ---------------------- */
+async function read(table, args = {}) {
+  let istrue = false; // boolean - if true, move to try/catch
+  // switch table columns/values based on table {}
+  let mysql = new Mysql(table, undefined);
+
+  console.log(tables)
+
+  if (tables.hasOwnProperty(table)) {
+    const obj = await mysql.read();
+    // console.log("RUN READ FN")
+    // console.log(obj)
+    return obj;
+  } else {
+    console.error("Something went wrong..." + mysql.err(errMessage));
+  }
+}
 // let newObject = new Mysql('table',[1,2,3]);
 // newObject.read(newObject.join(process.argv.slice(-1)[0]||6));
 
@@ -152,18 +156,6 @@ async function updatetablesCols(arr) {
   const describe = async (table) => await describeTable(table);
   // map props helper function
   const mapProperties = (array_var) => array_var.map((x) => x["Field"]);
-
-  // let describePets = await describe('pets')
-  // let describeOwners = await describe('owners')
-  // let describeBookings = await describe('bookings')
-
-  // mapProperties and store in variable
-  // let petsProps = mapProperties(describePets[0])
-  // let ownersProps = mapProperties(describeOwners[0])
-  // let bookingsProps = mapProperties(describeBookings[0])
-  // console.log(petsProps)
-  // console.log(ownersProps)
-  // console.log(bookingsProps)
 
   /* ----------Process - update tables after scanning the database and write to tables.json ----------- */
   let tables = {};
@@ -187,10 +179,16 @@ async function updatetablesCols(arr) {
     }
   }
 
-  // console.log(tables);
+  /* setup parent property for tables */
+  let parentProperty = 'tables'
+  let oj = {} // instantiate new object
+  oj[parentProperty] = {}; // set parent property in new object
+  oj[parentProperty] = tables; // insert current object (tables) in parent;
+  
+  // writefilesync
   fs.writeFileSync(
     path.resolve(__dirname, "tables.json"),
-    JSON.stringify(tables),
+    JSON.stringify(oj),
     "utf8"
   );
   return null;
@@ -200,8 +198,18 @@ async function describeTable(table) {
   const query = await pool.query(`describe ${table}`);
   return query;
 }
-
+async function getTables(schema){
+  const query = await pool.query(`select table_name from information_schema.key_column_usage where table_schema = '${schema}' and table_name != 'sessions'`);
+  // console.log(query)
+  // console.log(query[0])
+  // console.log([...query[0]].map(obj=>obj.TABLE_NAME))
+  return [...query[0]].map(obj=>obj.TABLE_NAME) // object of tables
+}
 /* ---------------------- delete ---------------------- */
 // updatetablesCols(['pets','owners','book ings'])
 
-module.exports = { create, read, updatetablesCols };
+module.exports = { create, read, updatetablesCols, getTables };
+
+
+// problem:
+// phone isnt captured when storing owner

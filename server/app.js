@@ -4,7 +4,8 @@ require("dotenv").config({
   encoding: "utf8",
   debug: false,
 });
-const {create,read, updatetablesCols} = require('./lib/mysql.js');
+const {create,read, updatetablesCols, getTables} = require('./lib/mysql.js');
+const dogsit = 'dogsit';
 // let reading = read('bookings')
 // console.log(reading)
 const express = require("express");
@@ -77,10 +78,11 @@ app.use(express.static(require("path").join(__dirname, "../public")));
 
 // upload pet image
 
-app.route('/tables/check').get((Req,res)=>{
-  console.log('hello')
-  updatetablesCols(['pets','owners','bookings'])
-  res.json({data:'hello'})
+app.route('/tables/check').get(async(req,res)=>{
+  console.log('checking tables')
+  const tables = await getTables(dogsit) // array of tables from db
+  updatetablesCols(tables);
+  res.end();
 })
 
 app.route("/upload/pet").post(uploadPet);
@@ -95,7 +97,7 @@ app.route("/book").post(async (req, res) => {
   }
 
   // get list of owners by id
-  const ownerIdList = await getOwners(pool)
+  const ownerIdList = await getOwners()
   // console.log(ownerIdList) // map of existing IDs
   const id = await generateId(ownerIdList);
   req.body.proof_of_vaccination = /(false|other)/.test(
@@ -165,7 +167,12 @@ app.route("/book").post(async (req, res) => {
 
     // pull json data from server (/bookings)
     const jsonFile = pullJsonData('bookings',filePathToJSON);
+    console.log("PULLED JSON DATA")
     console.log(jsonFile);
+
+    // insert the owner
+    storeOwner(jsonFile)
+    storePets(jsonFile)
 
   // response in json format
   res.json(formattedObj);
@@ -319,7 +326,7 @@ async function generateId(list){
     throw new Error(err)
   }
 }
-async function getOwners(pool){
+async function getOwners(){
   const currentOwners = await read('owners');
   const [rows,info] = [...currentOwners];
   const mapIds = [...rows].map(o => o['oid']);
@@ -345,15 +352,53 @@ function validateProperties(input,compare){
     compare = JSON.parse(compare);
     return compare.fname === input.fname && compare.lname === input.lname && compare.email === input.email
 }
-function storePet(jsonFile){
-  for(let i in jsonFile){
-    if(/^\d*$/.test(i)){
-      console.log(jsonFile[i])
+function storePets(jsonFile){
+console.log("STORE PETS - CHECK FILE!");
+// console.log(jsonFile);
+let payload = {}
+jsonFile = (jsonFile[0]);
+console.log(jsonFile);
+
+for(let num in jsonFile){
+    if(/[0-9]/g.test(num)){
+      const object = jsonFile[num]
+      for(let prop in object){
+          let prp = prop.slice(0,-1);
+        // MIGRAGE OWNER INFORMATION FROM FILE TO PAYLOAD
+        payload[prp] = object[prp]
+        // payload[pid] = object[prp].name;
+        // payload[pid] = object[prp].age;
+        // payload[pid] = object[prp].weight;
+        // payload[pid] = object[prp].breed;
+        // payload[pid] = object[prp].height;
+        // payload[pid] = object[prp].height_measurement;
+        // payload[pid] = object[prp].weight_measurement;
+        // payload[pid] = object[prp].type;
+      }
     }
-  }
+}
+console.log(payload);
+
+
+// payload.pseudo_name = jsonFile.pseudo_name;
+
+// "pid": "",
+// "name": "",
+// "age": "",
+// "weight": "",
+// "height": "",
+// "breed": "",
+// "height_measurement": "",
+// "weight_measurement": "",
+// "type": "",
+// "pseudo_name": ""
+
+// INSERT DATA INTO OWNERS TABLE
+// create('pets',payload)
 }
 function storeOwner(jsonFile){
-jsonFile = JSON.parse(jsonFile)[0];
+jsonFile = (jsonFile[0]);
+console.log("STORE OWNER - CHECK FILE!")
 console.log(jsonFile)
 let payload = {}
 // MIGRAGE OWNER INFORMATION FROM FILE TO PAYLOAD
@@ -365,14 +410,6 @@ payload.email = jsonFile.email;
 
 // INSERT DATA INTO OWNERS TABLE
 create('owners',payload)
-  // for(let i in jsonFile){
-  //   if(!/^[0-9]*$/.test(i)){
-  //     // console.log(jsonFile[i])
-  //     console.log(i+" : " + jsonFile[i])
-  //   } else {
-  //     console.log('false store')
-  //   }
-  // }
 }
 // const submission = fs.readFileSync(path.resolve(__dirname,'bookings','submission.2025.10.08.loj.json'),'utf8');
 // console.log(submission)

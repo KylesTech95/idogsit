@@ -1,5 +1,5 @@
 // check tables
-fetch('/tables/check').then(r=>r.json()).then(d=>console.log(d))
+fetch('/tables/check');
 
 const [dogpaw, catpaw] = [...document.getElementById("paw-container").children];
 const navlistitems = document.querySelectorAll(".nav-list-item");
@@ -288,9 +288,9 @@ form.onsubmit = (e) => {
       (x) => x.allgood === true
     )
   ) {
-    const fileForm = document.getElementById("upload-pet");
+    // const fileForm = document.getElementById("upload-pet");
     // submit file form
-    fileForm.submit();
+    // fileForm.submit();
     // submit booking
     postFetch("/book", payload);
     setTimeout(() => {
@@ -476,21 +476,8 @@ window.onchange = async () => {
     delBtn.classList.add("del-btn");
     delBtn.textContent = "X";
     ap[i].append(delBtn);
-    // console.log(ap[i])
-
-    // verify variable placements
-    // console.log(typeSelect)
-    // console.log(breedSelect)
-    // console.log(name)
-    // console.log(age);
-    // console.log(ageSuffix)
-    // console.log(height)
-    // console.log(heightMeasure)
-    // console.log(weight)
-    // console.log(weightMeasure)
-
+    
     // execute methods
-
     if (typeSelect) {
       typeSelect.onchange = async (e) => {
         lockQuantity = true;
