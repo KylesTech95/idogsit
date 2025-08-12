@@ -1,3 +1,6 @@
+// check tables
+fetch('/tables/check').then(r=>r.json()).then(d=>console.log(d))
+
 const [dogpaw, catpaw] = [...document.getElementById("paw-container").children];
 const navlistitems = document.querySelectorAll(".nav-list-item");
 const form = document.getElementById("book-id");

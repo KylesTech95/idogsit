@@ -4,9 +4,9 @@ require("dotenv").config({
   encoding: "utf8",
   debug: false,
 });
-const {create,read} = require('./lib/mysql.js')
-let reading = read('bookings')
-console.log(reading)
+const {create,read, updatetablesCols} = require('./lib/mysql.js');
+// let reading = read('bookings')
+// console.log(reading)
 const express = require("express");
 const app = express();
 const port = process.env.PORT || 3033;
@@ -18,6 +18,7 @@ const fileupload = require("express-fileupload");
 const { gzip, ungzip } = require("node-gzip");
 const cookieSession = require("cookie-session");
 const session = require("express-session");
+const { emitWarning } = require("process");
 const MySQLStore = require("express-mysql-session")(session);
 const animals = ["dog", "cat", "rabbit", "turtle", "snake"];
 const times = ["years", "months", "weeks"];
@@ -75,6 +76,13 @@ app.use(express.static(require("path").join(__dirname, "../public")));
 // routes
 
 // upload pet image
+
+app.route('/tables/check').get((Req,res)=>{
+  console.log('hello')
+  updatetablesCols(['pets','owners','bookings'])
+  res.json({data:'hello'})
+})
+
 app.route("/upload/pet").post(uploadPet);
 
 //write booking to server
@@ -88,7 +96,7 @@ app.route("/book").post(async (req, res) => {
 
   // get list of owners by id
   const ownerIdList = await getOwners(pool)
-  console.log(ownerIdList)
+  // console.log(ownerIdList) // map of existing IDs
   const id = await generateId(ownerIdList);
   req.body.proof_of_vaccination = /(false|other)/.test(
     req.body.proof_of_vaccination
@@ -144,7 +152,7 @@ app.route("/book").post(async (req, res) => {
   // console.log(booking_details);
   let formattedObj = splitDetailsByNum(booking_details);
   const payload = JSON.stringify([formattedObj]);
-
+ 
   // write formatted object to bookings folder
   let submission = 'submission'
   let formatDateSubmission = formatDate.split`/`.join`.`
@@ -214,7 +222,6 @@ app.route("/breed/:animal").get(async (req, res) => {
 // })
 
 // listen
-
 
 
 
@@ -297,6 +304,28 @@ async function getAllFrom(tablename, rowOrInfo, pool) {
     throw new Error(err);
   }
 }
+async function generateId(list){
+  let id = require('crypto').randomBytes(16).toString('hex').slice(-8);
+  // const id = 'd938rn34frn'
+  // const id = '2b8f7aad'
+  try{
+    if(!list.includes(id)){
+      return id;
+    } else {
+       return generateId(list)
+    }
+  }
+  catch(err){
+    throw new Error(err)
+  }
+}
+async function getOwners(pool){
+  const currentOwners = await read('owners');
+  const [rows,info] = [...currentOwners];
+  const mapIds = [...rows].map(o => o['oid']);
+  return mapIds
+}
+
 function splitDetailsByNum(details) {
   let nums = {};
   for (let i in details) {
@@ -324,14 +353,29 @@ function storePet(jsonFile){
   }
 }
 function storeOwner(jsonFile){
-for(let i in jsonFile){
-    if(!/^\d*$/.test(i)){
-      console.log(jsonFile[i])
-    //   console.log(i+" : " + jsonFile[i])
-    }
-  }
-}
+jsonFile = JSON.parse(jsonFile)[0];
+console.log(jsonFile)
+let payload = {}
+// MIGRAGE OWNER INFORMATION FROM FILE TO PAYLOAD
+payload.firstname = jsonFile.fname;
+payload.lastname = jsonFile.lname;
+payload.oid = jsonFile.id;
+payload.phone = jsonFile.phone;
+payload.email = jsonFile.email;
 
+// INSERT DATA INTO OWNERS TABLE
+create('owners',payload)
+  // for(let i in jsonFile){
+  //   if(!/^[0-9]*$/.test(i)){
+  //     // console.log(jsonFile[i])
+  //     console.log(i+" : " + jsonFile[i])
+  //   } else {
+  //     console.log('false store')
+  //   }
+  // }
+}
+// const submission = fs.readFileSync(path.resolve(__dirname,'bookings','submission.2025.10.08.loj.json'),'utf8');
+// console.log(submission)
 function storeBooking(jsonFile){
     // method to store booking
     return null;
@@ -343,22 +387,17 @@ function pullJsonData(directory,filename){
     j = JSON.parse(f);
     return j; // return array
 }
-async function generateId(list){
-  let id = require('crypto').randomBytes(16).toString('hex').slice(-8);
-  // const id = 'd938rn34frn'
-  // const id = '2b8f7aad'
-  try{
-    if(!list.includes(id)){
-      return id;
-    } else {
-       return generateId(list)
-    }
-  }
-  catch(err){
-    throw new Error(err)
-  }
-}
 
+// async function updateMysqlCols(req,res,next){
+//   try{
+//     let response = await updatetablesCols(['pets','owners','bookings'])
+//     console.log(response)
+//     next();
+//   }
+//   catch(err){
+//     throw new Error(err)
+//   }
+// }
 /* ---------- new Promise to resolve ---------- */
 //  // resolve inner
 //   let inner = new Promise(resolve => {
@@ -381,11 +420,3 @@ async function generateId(list){
 //     return value;
 //   })
 
-async function getOwners(pool){
-  const currentOwners = await pool.query('select oid from owners;');
-  const [rows,info] = currentOwners;
-  const mapIds = [...rows].map(o => o['oid']);
-  // console.log(rows)
-  // console.log(mapIds)
-  return mapIds
-}

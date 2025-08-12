@@ -1,13 +1,15 @@
 const { pool } = require("./db.js");
-const {tables} = require('./tables.json')
+const fs = require("fs");
+const path = require("path");
+const { tables } = require("./tables.json");
 // console.log(tables)
 // mysql database class
 class Mysql {
-    constructor(table, args) {
+  constructor(table, args) {
     this.table = table;
     this.args = args;
-    }
-    async create() {
+  }
+  async create() {
     // store args into params variable
     let params = this.args;
     let [keys, values] = [Object.keys(params), Object.values(params)];
@@ -16,54 +18,49 @@ class Mysql {
     console.log("pool query Begin...");
     // pool the database and insert data with params
     await pool.query(
-        `insert into ${this.table}(${keys.join`,`}) values(${new Array(
+      `insert into ${this.table}(${keys.join`,`}) values(${new Array(
         values.length
-        )
+      )
         .fill("?")
         .join(",")});`,
-        values
+      values
     );
     console.log("pool query complete.");
     require("process").exit(1);
-    }
-    async read(fn){
-      if(fn){
-        // method
-        return fn
-      } else {
-        // store args into params variable
-        // let params = this.args;
-        // let [keys, values] = [Object.keys(params), Object.values(params)];
+  }
+  async read() {
+    // query
+    // console.log("pool query Begin...");
+    // pool the database and insert data with params
+    const query = await pool.query(`SELECT * from ${this.table}`);
+    // console.log("\n")
+    // console.log(query[0])
+    // console.log("pool query complete.");
+    // require("process").exit(1);
+    const [rows, information] = [...query];
+    // return query
+    return query;
+  }
 
-        // query
-        console.log("pool query Begin...");
-        // pool the database and insert data with params
-        const query = await pool.query(
-            `SELECT * from ${this.table}`);
-        console.log("pool query complete.");
-        // require("process").exit(1);
-        const [rows,information] = [...query];
-        return {rows:rows,information:information}
-      }
-    }
-    async update(){
+  async update() {
     return null;
-    }
-    async delete(){
+  }
+  async delete() {
     return null;
-    }
+  }
 
-// special functions
-    // join tables
-    async join(idx){
-        idx = Number(idx)
-        let direction = idx < 3 && idx >= 0 ? ['left','inner','right'][idx] : 'invalid';
-        console.log(direction)
-        return null;
-    }
-    err(message) {
+  // special functions
+  // join tables
+  async join(idx) {
+    idx = Number(idx);
+    let direction =
+      idx < 3 && idx >= 0 ? ["left", "inner", "right"][idx] : "invalid";
+    // console.log(direction)
+    return null;
+  }
+  err(message) {
     return message;
-    }
+  }
 }
 /* ------------------------------------------------------------------ */
 
@@ -119,20 +116,22 @@ function create(table, args = {}) {
     throw new Error(err);
   }
 }
-async function read(table, args = {}){
+async function read(table, args = {}) {
   let istrue = false; // boolean - if true, move to try/catch
   // switch table columns/values based on table {}
-    let mysql = new Mysql(table,undefined);
-    
-  if(tables.hasOwnProperty(table)){
-    return await mysql.read()
+  let mysql = new Mysql(table, undefined);
+
+  if (tables.hasOwnProperty(table)) {
+    const obj = await mysql.read();
+    // console.log("RUN READ FN")
+    // console.log(obj)
+    return obj;
   } else {
-      console.error("Something went wrong..." + mysql.err(errMessage));
+    console.error("Something went wrong..." + mysql.err(errMessage));
   }
 }
-
 /* ---------------------- create ---------------------- */
-// // true positive
+// true positive
 // create('pets',{name:'shayla',age:1,height:12.5,weight:20,breed:'small-breed'});
 // create('owners',{firstname:'Liam',lastname:'shade',phone:'123-343-1223'});
 // create('bookings',{pid:2,oid:3,booking_date:'2025-10-20','booking_time':'04:33:04'});
@@ -147,7 +146,62 @@ async function read(table, args = {}){
 // newObject.read(newObject.join(process.argv.slice(-1)[0]||6));
 
 /* ---------------------- update ---------------------- */
+// update tables.json
+async function updatetablesCols(arr) {
+  // console.log("UPDATE COLS IN MYSQL")
+  const describe = async (table) => await describeTable(table);
+  // map props helper function
+  const mapProperties = (array_var) => array_var.map((x) => x["Field"]);
+
+  // let describePets = await describe('pets')
+  // let describeOwners = await describe('owners')
+  // let describeBookings = await describe('bookings')
+
+  // mapProperties and store in variable
+  // let petsProps = mapProperties(describePets[0])
+  // let ownersProps = mapProperties(describeOwners[0])
+  // let bookingsProps = mapProperties(describeBookings[0])
+  // console.log(petsProps)
+  // console.log(ownersProps)
+  // console.log(bookingsProps)
+
+  /* ----------Process - update tables after scanning the database and write to tables.json ----------- */
+  let tables = {};
+  // console.log("ITERATION");
+  // map the array
+  for (let i = 0; i < arr.length; i++) {
+    const pets = arr[i]; // capture pets
+    tables[pets] = {};
+    let describeItem = await describe(pets);
+    let describeProps = mapProperties(describeItem[0]);
+    // console.log(describeProps);
+
+    let rows = [...describeProps];
+    // let rows = await read(arr[i])
+
+    // iterate through the rows
+    for (let j = 0; j < rows.length; j++) {
+        let array = rows[j];
+        // console.log(array)
+        tables[pets][array] = "";
+    }
+  }
+
+  // console.log(tables);
+  fs.writeFileSync(
+    path.resolve(__dirname, "tables.json"),
+    JSON.stringify(tables),
+    "utf8"
+  );
+  return null;
+}
+// describe table
+async function describeTable(table) {
+  const query = await pool.query(`describe ${table}`);
+  return query;
+}
 
 /* ---------------------- delete ---------------------- */
+// updatetablesCols(['pets','owners','book ings'])
 
-module.exports = { create, read};
+module.exports = { create, read, updatetablesCols };
