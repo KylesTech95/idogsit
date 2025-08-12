@@ -365,7 +365,12 @@ for(let num in jsonFile){
       for(let prop in object){
           let prp = prop.slice(0,-1);
         // MIGRAGE OWNER INFORMATION FROM FILE TO PAYLOAD
+        if(/^((animal-)?select-input-)/g.test(prp)){
+          prp = prp.replace(/^((animal-)?select-input-)/g,'measurement_')
+        }
+
         payload[prp] = object[prp]
+
         // payload[pid] = object[prp].name;
         // payload[pid] = object[prp].age;
         // payload[pid] = object[prp].weight;
@@ -378,7 +383,6 @@ for(let num in jsonFile){
     }
 }
 console.log(payload);
-
 
 // payload.pseudo_name = jsonFile.pseudo_name;
 
