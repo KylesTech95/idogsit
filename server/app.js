@@ -382,16 +382,26 @@ for(let num in jsonFile){
         abstract[prp] = object[prop]
       }
     }
+    delete payload['pov']
+    delete payload['file']
+    delete payload['type']
+
+    delete abstract['pov']
+    delete abstract['file']
+    delete abstract['type']
+
 }
 // delete payload['animalselect-input-weight']
 // delete payload['animalselect-input-height']
 
+
 // delete abstract['animalselect-input-weight']
 // delete abstract['animalselect-input-height']
 
-console.log(payload);
-console.log(abstract)
+// console.log(payload);
+// console.log(abstract)
 
+    console.log(abstract)
 
 // payload.pseudo_name = jsonFile.pseudo_name;
 
@@ -407,7 +417,7 @@ console.log(abstract)
       // "age_measurement": ""
 
 // INSERT DATA INTO OWNERS TABLE
-// create('pets',payload)
+create('pets',payload)
 }
 function storeOwner(jsonFile){
 jsonFile = (jsonFile[0]);
