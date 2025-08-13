@@ -97,7 +97,7 @@ app.route("/book").post(async (req, res) => {
   }
 
   // get list of owners by id
-  const ownerIdList = await getOwners()
+  const ownerIdList = await getList('owners')
   // console.log(ownerIdList) // map of existing IDs
   const id = await generateId(ownerIdList);
   req.body.proof_of_vaccination = /(false|other)/.test(
@@ -170,12 +170,12 @@ app.route("/book").post(async (req, res) => {
 
     // pull json data from server (/bookings)
     const jsonFile = pullJsonData('bookings',filePathToJSON);
-    console.log("PULLED JSON DATA")
-    console.log(jsonFile);
+    // console.log("PULLED JSON DATA")
+    // console.log(jsonFile);
 
     // insert the owner
     storeOwner(jsonFile)
-    storePets(jsonFile)
+    await storePets(jsonFile)
 
   // response in json format
   res.json(formattedObj);
@@ -319,20 +319,25 @@ async function generateId(list){
   // const id = 'd938rn34frn'
   // const id = '2b8f7aad'
   try{
-    if(!list.includes(id)){
+    if(list && list!=undefined){
+      if(!list.includes(id)){
       return id;
     } else {
        return generateId(list)
+    } 
+    } else {
+      return id;
     }
+    
   }
   catch(err){
     throw new Error(err)
   }
 }
-async function getOwners(){
-  const currentOwners = await read('owners');
+async function getList(table){
+  const currentOwners = await read(table);
   const [rows,info] = [...currentOwners];
-  const mapIds = [...rows].map(o => o['oid']);
+  const mapIds = [...rows].map(o => o[`${table[0]}id`]); // pid, oid, bid (unique/primary)
   return mapIds
 }
 
@@ -355,13 +360,18 @@ function validateProperties(input,compare){
     compare = JSON.parse(compare);
     return compare.fname === input.fname && compare.lname === input.lname && compare.email === input.email
 }
-function storePets(jsonFile){
+async function storePets(jsonFile){
+const petIdList = await getList('pets');
+console.log('PET LIST\n')
+console.log(petIdList);
+const pid = await generateId(petIdList);
 console.log("STORE PETS - CHECK FILE!");
-// console.log(jsonFile);
+const id = generateId()
 let payload = {}, abstract = {}
 jsonFile = (jsonFile[0]);
-console.log(jsonFile);
 
+// add pid to payload
+payload['pid'] = pid;
 for(let num in jsonFile){
     if(/[0-9]/g.test(num)){
       const object = jsonFile[num]
@@ -377,31 +387,22 @@ for(let num in jsonFile){
         if(/animaltype/gi.test(prp)){
           prp = prp.replace(/animaltype/gi,'aType');
         }
+        if(/^age$/i.test(prop)){
+          payload[prop] = +payload[prop]||0
+        }
 
-        payload[prp] = object[prp]
+        payload[prp] = object[prop]
         abstract[prp] = object[prop]
       }
+      delete payload['pov']
+      delete payload['file']
+      delete payload['type']
+
+      delete abstract['pov']
+      delete abstract['file']
+      delete abstract['type']
     }
-    delete payload['pov']
-    delete payload['file']
-    delete payload['type']
-
-    delete abstract['pov']
-    delete abstract['file']
-    delete abstract['type']
-
 }
-// delete payload['animalselect-input-weight']
-// delete payload['animalselect-input-height']
-
-
-// delete abstract['animalselect-input-weight']
-// delete abstract['animalselect-input-height']
-
-// console.log(payload);
-// console.log(abstract)
-
-    console.log(abstract)
 
 // payload.pseudo_name = jsonFile.pseudo_name;
 
@@ -417,7 +418,7 @@ for(let num in jsonFile){
       // "age_measurement": ""
 
 // INSERT DATA INTO OWNERS TABLE
-create('pets',payload)
+    create('pets',payload)
 }
 function storeOwner(jsonFile){
 jsonFile = (jsonFile[0]);

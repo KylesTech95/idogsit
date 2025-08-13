@@ -79,14 +79,14 @@ DROP TABLE IF EXISTS `pets`;
 CREATE TABLE `pets` (
   `pid` varchar(25) NOT NULL,
   `name` varchar(50) NOT NULL,
-  `age` float NOT NULL,
+  `age` int DEFAULT NULL,
   `weight` float DEFAULT NULL,
   `height` float DEFAULT NULL,
   `breed` varchar(50) NOT NULL,
   `height_measurement` varchar(5) DEFAULT NULL,
   `weight_measurement` varchar(5) DEFAULT NULL,
   `aType` varchar(10) DEFAULT NULL,
-  `age_measurement` int NOT NULL,
+  `age_measurement` varchar(10) DEFAULT NULL,
   UNIQUE KEY `uni_pets` (`pid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -99,6 +99,31 @@ LOCK TABLES `pets` WRITE;
 /*!40000 ALTER TABLE `pets` DISABLE KEYS */;
 /*!40000 ALTER TABLE `pets` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Table structure for table `sessions`
+--
+
+DROP TABLE IF EXISTS `sessions`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `sessions` (
+  `session_id` varchar(128) CHARACTER SET utf8mb4 COLLATE utf8mb4_bin NOT NULL,
+  `expires` int unsigned NOT NULL,
+  `data` mediumtext CHARACTER SET utf8mb4 COLLATE utf8mb4_bin,
+  PRIMARY KEY (`session_id`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `sessions`
+--
+
+LOCK TABLES `sessions` WRITE;
+/*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
+INSERT INTO `sessions` VALUES ('qs_ejb3j_oH_P5IhqfT3okSk17bNAzse',1755128138,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-13T23:12:20.729Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('vVgI6YWee1jjoFONUsqrMhlUylRXXrnb',1755130779,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-14T00:13:22.267Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
+/*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
+UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -109,4 +134,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-13 15:27:30
+-- Dump completed on 2025-08-13 19:51:56
