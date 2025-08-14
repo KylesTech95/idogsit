@@ -374,7 +374,7 @@ jsonFile = (jsonFile[0]);
 payload['pid'] = pid;
 for(let num in jsonFile){
     if(/[0-9]/g.test(num)){
-      const object = jsonFile[num]
+      let object = jsonFile[num]
       for(let prop in object){
           let prp = prop.slice(0,-1);
         // MIGRAGE OWNER INFORMATION FROM FILE TO PAYLOAD
@@ -386,9 +386,6 @@ for(let num in jsonFile){
         }
         if(/animaltype/gi.test(prp)){
           prp = prp.replace(/animaltype/gi,'aType');
-        }
-        if(/^age$/i.test(prop)){
-          payload[prop] = +payload[prop]||0
         }
 
         payload[prp] = object[prop]

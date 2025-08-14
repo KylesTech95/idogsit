@@ -67,7 +67,7 @@ CREATE TABLE `owners` (
 
 LOCK TABLES `owners` WRITE;
 /*!40000 ALTER TABLE `owners` DISABLE KEYS */;
-INSERT INTO `owners` VALUES ('39d8d84n4','kyle','bess','123-123-1234','user@user.com');
+INSERT INTO `owners` VALUES ('d43c9bf6','jack','byron','9993330040','jb@user.com'),('c71b96a1','crane','box','1231231233','ks@user');
 /*!40000 ALTER TABLE `owners` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -102,7 +102,7 @@ CREATE TABLE `pets` (
 
 LOCK TABLES `pets` WRITE;
 /*!40000 ALTER TABLE `pets` DISABLE KEYS */;
-INSERT INTO `pets` VALUES ('f9329f232f','sugar',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'39d8d84n4');
+INSERT INTO `pets` VALUES ('8742beff','sissy',9,100,22.2,'American Curl','cm','cm','cat','months',NULL),('b2a9aa31','bass',3,123312,30,'American rabbit','cm','cm','rabbit','years',NULL);
 /*!40000 ALTER TABLE `pets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,7 +127,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('kJN_9Xp01HnCtXNyEYv7fqt_GAUEZu9a',1755171377,'{\"cookie\":{\"originalMaxAge\":1799999,\"expires\":\"2025-08-14T11:36:16.791Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('zxFQX0qs8DNmPPRT3PsMVjWLDcDkduZ_',1755169271,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-14T10:32:06.613Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
+INSERT INTO `sessions` VALUES ('WlWtjQEj87pNzxNQLcjpxZ1N1UjPX7OU',1755174095,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-14T12:21:18.788Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('kJN_9Xp01HnCtXNyEYv7fqt_GAUEZu9a',1755173118,'{\"cookie\":{\"originalMaxAge\":1799999,\"expires\":\"2025-08-14T11:36:16.791Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('zxFQX0qs8DNmPPRT3PsMVjWLDcDkduZ_',1755169271,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-14T10:32:06.613Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -140,4 +140,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-14  7:12:15
+-- Dump completed on 2025-08-14 11:48:13

@@ -29,7 +29,7 @@ const petinfoCol = `<div class="petinfo-col">
                             <option value="4">Snake</option>
                         </select>
                         <label for="breed">Breed/Species</label>
-                        <input type="text" name="breed" id="breed-input" placeholder="Breed/Species">
+                        <input type="text" name="breed" id="breed-input" placeholder="Breed/Species" required>
                     </div>
                     <div>
                         <label for="petname">Name</label>
@@ -38,7 +38,7 @@ const petinfoCol = `<div class="petinfo-col">
                     <!-- pet age  -->
                     <div>
                         <label for="petage">Age</label>
-                        <input type="number" min="" name="petage" id="petage-input" class="noselect" placeholder="Age">
+                        <input type="number" min="" name="petage" id="petage-input" class="noselect" placeholder="Age" required>
                         <select name="select-input-age" id="select-input-age">
                             <option value="0">Years</option>
                             <option value="1">Months</option>
@@ -53,7 +53,7 @@ const petinfoCol = `<div class="petinfo-col">
                     <div>
                         <!-- height -->
                         <label for="petheight">Height</label>
-                        <input type="text" name="" id="">
+                        <input type="text" name="height" id="" required>
                         <select name="select-input-height" id="select-input-height">
                             <option value="0">cm</option>
                             <option value="1">in</option>
@@ -61,7 +61,7 @@ const petinfoCol = `<div class="petinfo-col">
 
                         <!-- weight -->
                          <label for="petweight">Weight</label>
-                        <input type="text" name="" id="">
+                        <input type="text" name="weight" id="" required>
                         <select name="select-input-weight" id="select-input-weight">
                             <option value="0">lbs</option>
                             <option value="1">kg</option>
