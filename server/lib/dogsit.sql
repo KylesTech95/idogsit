@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 9.1.0, for Win64 (x86_64)
+-- MySQL dump 10.13  Distrib 9.3.0, for macos15.2 (arm64)
 --
 -- Host: localhost    Database: dogsit
 -- ------------------------------------------------------
--- Server version	8.0.43
+-- Server version	9.3.0
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -56,7 +56,8 @@ CREATE TABLE `owners` (
   `lastname` varchar(25) NOT NULL,
   `phone` varchar(16) NOT NULL,
   `email` varchar(255) NOT NULL,
-  UNIQUE KEY `email` (`email`)
+  UNIQUE KEY `email` (`email`),
+  UNIQUE KEY `oid_uni` (`oid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -66,6 +67,7 @@ CREATE TABLE `owners` (
 
 LOCK TABLES `owners` WRITE;
 /*!40000 ALTER TABLE `owners` DISABLE KEYS */;
+INSERT INTO `owners` VALUES ('39d8d84n4','kyle','bess','123-123-1234','user@user.com');
 /*!40000 ALTER TABLE `owners` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -82,12 +84,15 @@ CREATE TABLE `pets` (
   `age` int DEFAULT NULL,
   `weight` float DEFAULT NULL,
   `height` float DEFAULT NULL,
-  `breed` varchar(50) NOT NULL,
+  `breed` varchar(50) DEFAULT NULL,
   `height_measurement` varchar(5) DEFAULT NULL,
   `weight_measurement` varchar(5) DEFAULT NULL,
   `aType` varchar(10) DEFAULT NULL,
   `age_measurement` varchar(10) DEFAULT NULL,
-  UNIQUE KEY `uni_pets` (`pid`)
+  `owner` varchar(25) DEFAULT NULL,
+  UNIQUE KEY `uni_pets` (`pid`),
+  KEY `owner` (`owner`),
+  CONSTRAINT `pets_ibfk_1` FOREIGN KEY (`owner`) REFERENCES `owners` (`oid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
 
@@ -97,6 +102,7 @@ CREATE TABLE `pets` (
 
 LOCK TABLES `pets` WRITE;
 /*!40000 ALTER TABLE `pets` DISABLE KEYS */;
+INSERT INTO `pets` VALUES ('f9329f232f','sugar',NULL,NULL,NULL,NULL,NULL,NULL,NULL,NULL,'39d8d84n4');
 /*!40000 ALTER TABLE `pets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -121,7 +127,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('qs_ejb3j_oH_P5IhqfT3okSk17bNAzse',1755128138,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-13T23:12:20.729Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('vVgI6YWee1jjoFONUsqrMhlUylRXXrnb',1755130779,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-14T00:13:22.267Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
+INSERT INTO `sessions` VALUES ('kJN_9Xp01HnCtXNyEYv7fqt_GAUEZu9a',1755171377,'{\"cookie\":{\"originalMaxAge\":1799999,\"expires\":\"2025-08-14T11:36:16.791Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('zxFQX0qs8DNmPPRT3PsMVjWLDcDkduZ_',1755169271,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-14T10:32:06.613Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
@@ -134,4 +140,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-13 19:51:56
+-- Dump completed on 2025-08-14  7:12:15
