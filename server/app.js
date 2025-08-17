@@ -174,9 +174,9 @@ app.route("/book").post(async (req, res) => {
     // console.log(jsonFile);
 
     // insert the owner
-    storeOwner(jsonFile)
-    await storePets(jsonFile)
-
+    // storeOwner(jsonFile)
+    // await storePets(jsonFile)
+       storeBooking(jsonFile)
   // response in json format
   res.json(formattedObj);
 });
@@ -402,25 +402,8 @@ for(let num in jsonFile){
       payload['pid'] = pid;
       payload['owner'] = ownerId;
       create('pets',payload);
-      
     }
 }
-
-// payload.pseudo_name = jsonFile.pseudo_name;
-
-      // "pid": "",
-      // "name": "",
-      // "age": "",
-      // "weight": "",
-      // "height": "",
-      // "breed": "",
-      // "height_measurement": "",
-      // "weight_measurement": "",
-      // "aType": "",
-      // "age_measurement": ""
-
-// INSERT DATA INTO OWNERS TABLE
-    // create('pets',payload)
 }
 function storeOwner(jsonFile){
 jsonFile = (jsonFile[0]);
@@ -437,8 +420,29 @@ payload.email = jsonFile.email;
 // INSERT DATA INTO OWNERS TABLE
 create('owners',payload)
 }
-function storeBooking(jsonFile){
+async function storeBooking(jsonFile){
+  console.log("STORE BOOKINGS")
     // method to store booking
+    // get Ids
+    const listOfPets = await read('pets');
+    const [row,info] = listOfPets;
+    const mapPets = row;
+    console.log(mapPets)
+    const {oid,booking_time,booking_date} = jsonFile;
+    const payload = {};
+    const petIds = [] // empty array of pet ids
+    
+    // for(let num in jsonFile){
+    //   // console.log(jsonFile[num])
+    //     if (/[0-9]+$/g.test(num)) {
+    //        console.log("IDENTIFY PIDs of ANIMALS in BOOKIGN")
+    //        console.log(pid)
+    //        petIds.push(pid)
+    //     }
+    // } 
+    // stringify petIds
+    // const stringifiedPetIds = JSON.stringify(petIds);
+    // console.log(stringifiedPetIds)
     return null;
 }
 function pullJsonData(directory,filename){
@@ -447,7 +451,8 @@ function pullJsonData(directory,filename){
     f = fs.readFileSync(path.resolve(__dirname,directory,filename),'utf8');
     j = JSON.parse(f);
     return j; // return array
-}
+}  
+
 
 // async function updateMysqlCols(req,res,next){
 //   try{

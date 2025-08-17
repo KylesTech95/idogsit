@@ -135,8 +135,6 @@ async function read(table, args = {}) {
   // switch table columns/values based on table {}
   let mysql = new Mysql(table, undefined);
 
-  console.log(tables)
-
   if (tables.hasOwnProperty(table)) {
     const obj = await mysql.read();
     // console.log("RUN READ FN")
