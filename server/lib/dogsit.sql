@@ -24,7 +24,7 @@ DROP TABLE IF EXISTS `bookings`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings` (
   `bid` varchar(25) NOT NULL,
-  `pid` bigint unsigned DEFAULT NULL,
+  `pid` varchar(255) DEFAULT NULL,
   `oid` bigint unsigned DEFAULT NULL,
   `booking_time` time DEFAULT NULL,
   `booking_date` date DEFAULT NULL,
@@ -169,4 +169,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-17  9:49:10
+-- Dump completed on 2025-08-17  9:58:19

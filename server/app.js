@@ -437,8 +437,6 @@ payload.email = jsonFile.email;
 // INSERT DATA INTO OWNERS TABLE
 create('owners',payload)
 }
-// const submission = fs.readFileSync(path.resolve(__dirname,'bookings','submission.2025.10.08.loj.json'),'utf8');
-// console.log(submission)
 function storeBooking(jsonFile){
     // method to store booking
     return null;
