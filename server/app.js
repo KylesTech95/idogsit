@@ -362,18 +362,16 @@ function validateProperties(input,compare){
 }
 async function storePets(jsonFile){
 const petIdList = await getList('pets');
-console.log('PET LIST\n')
-console.log(petIdList);
-const pid = await generateId(petIdList);
 console.log("STORE PETS - CHECK FILE!");
 const id = generateId()
 let payload = {}, abstract = {}
 jsonFile = (jsonFile[0]);
+const ownerId = jsonFile.id;
 
-// add pid to payload
-payload['pid'] = pid;
 for(let num in jsonFile){
     if(/[0-9]/g.test(num)){
+      console.log("NUM")
+      console.log(num)
       let object = jsonFile[num]
       for(let prop in object){
           let prp = prop.slice(0,-1);
@@ -398,6 +396,13 @@ for(let num in jsonFile){
       delete abstract['pov']
       delete abstract['file']
       delete abstract['type']
+
+      // add pid to payload
+      const pid = await generateId(petIdList);
+      payload['pid'] = pid;
+      payload['owner'] = ownerId;
+      create('pets',payload);
+      
     }
 }
 
@@ -415,7 +420,7 @@ for(let num in jsonFile){
       // "age_measurement": ""
 
 // INSERT DATA INTO OWNERS TABLE
-    create('pets',payload)
+    // create('pets',payload)
 }
 function storeOwner(jsonFile){
 jsonFile = (jsonFile[0]);
