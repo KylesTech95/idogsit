@@ -67,7 +67,6 @@ CREATE TABLE `owners` (
 
 LOCK TABLES `owners` WRITE;
 /*!40000 ALTER TABLE `owners` DISABLE KEYS */;
-INSERT INTO `owners` VALUES ('d43c9bf6','jack','byron','9993330040','jb@user.com'),('c71b96a1','crane','box','1231231233','ks@user');
 /*!40000 ALTER TABLE `owners` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -84,7 +83,7 @@ CREATE TABLE `pets` (
   `age` int DEFAULT NULL,
   `weight` float DEFAULT NULL,
   `height` float DEFAULT NULL,
-  `breed` varchar(50) DEFAULT NULL,
+  `breed` varchar(255) DEFAULT NULL,
   `height_measurement` varchar(5) DEFAULT NULL,
   `weight_measurement` varchar(5) DEFAULT NULL,
   `aType` varchar(10) DEFAULT NULL,
@@ -102,7 +101,6 @@ CREATE TABLE `pets` (
 
 LOCK TABLES `pets` WRITE;
 /*!40000 ALTER TABLE `pets` DISABLE KEYS */;
-INSERT INTO `pets` VALUES ('8742beff','sissy',9,100,22.2,'American Curl','cm','cm','cat','months',NULL),('b2a9aa31','bass',3,123312,30,'American rabbit','cm','cm','rabbit','years',NULL);
 /*!40000 ALTER TABLE `pets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -127,9 +125,40 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('WlWtjQEj87pNzxNQLcjpxZ1N1UjPX7OU',1755174095,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-14T12:21:18.788Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('kJN_9Xp01HnCtXNyEYv7fqt_GAUEZu9a',1755173118,'{\"cookie\":{\"originalMaxAge\":1799999,\"expires\":\"2025-08-14T11:36:16.791Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('zxFQX0qs8DNmPPRT3PsMVjWLDcDkduZ_',1755169271,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-14T10:32:06.613Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
+INSERT INTO `sessions` VALUES ('Ezqo2Mopruwo58vsclW6hTc8JD0A8mwU',1755439668,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-17T14:07:32.008Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('Gp1OTS7E1kKaKiAoGBEFxAuUU0o9KYMC',1755437811,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-17T13:06:57.158Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('SkWccILnmluZhdw5F5HDxG2iIHxkLAp0',1755439548,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-17T13:36:59.152Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
+
+--
+-- Temporary view structure for view `table_size_in_mb`
+--
+
+DROP TABLE IF EXISTS `table_size_in_mb`;
+/*!50001 DROP VIEW IF EXISTS `table_size_in_mb`*/;
+SET @saved_cs_client     = @@character_set_client;
+/*!50503 SET character_set_client = utf8mb4 */;
+/*!50001 CREATE VIEW `table_size_in_mb` AS SELECT 
+ 1 AS `table_name`,
+ 1 AS `Size in MB`*/;
+SET character_set_client = @saved_cs_client;
+
+--
+-- Final view structure for view `table_size_in_mb`
+--
+
+/*!50001 DROP VIEW IF EXISTS `table_size_in_mb`*/;
+/*!50001 SET @saved_cs_client          = @@character_set_client */;
+/*!50001 SET @saved_cs_results         = @@character_set_results */;
+/*!50001 SET @saved_col_connection     = @@collation_connection */;
+/*!50001 SET character_set_client      = utf8mb4 */;
+/*!50001 SET character_set_results     = utf8mb4 */;
+/*!50001 SET collation_connection      = utf8mb4_0900_ai_ci */;
+/*!50001 CREATE ALGORITHM=UNDEFINED */
+/*!50013 DEFINER=`dogsitAdmin`@`localhost` SQL SECURITY DEFINER */
+/*!50001 VIEW `table_size_in_mb` AS select `information_schema`.`tables`.`TABLE_NAME` AS `table_name`,round((((`information_schema`.`tables`.`DATA_LENGTH` + `information_schema`.`tables`.`INDEX_LENGTH`) / 1024) / 1024),2) AS `Size in MB` from `information_schema`.`TABLES` where (`information_schema`.`tables`.`TABLE_SCHEMA` = 'dogsit') */;
+/*!50001 SET character_set_client      = @saved_cs_client */;
+/*!50001 SET character_set_results     = @saved_cs_results */;
+/*!50001 SET collation_connection      = @saved_col_connection */;
 /*!40103 SET TIME_ZONE=@OLD_TIME_ZONE */;
 
 /*!40101 SET SQL_MODE=@OLD_SQL_MODE */;
@@ -140,4 +169,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-14 11:48:13
+-- Dump completed on 2025-08-17  9:49:10
