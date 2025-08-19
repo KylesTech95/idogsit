@@ -6,6 +6,11 @@ require("dotenv").config({
 });
 const {create,read, updatetablesCols, getTables} = require('./lib/mysql.js');
 const dogsit = 'dogsit';
+const prefix = {
+  owners:'OWN',
+  pets:'PET',
+  booking:'SCH'
+}
 // let reading = read('bookings')
 // console.log(reading)
 const express = require("express");
@@ -99,7 +104,8 @@ app.route("/book").post(async (req, res) => {
   // get list of owners by id
   const ownerIdList = await getList('owners')
   // console.log(ownerIdList) // map of existing IDs
-  const id = await generateId(ownerIdList);
+  let oid = await generateId(ownerIdList);
+  oid = prefix.owners + oid;
   req.body.proof_of_vaccination = /(false|other)/.test(
     req.body.proof_of_vaccination
   )
@@ -111,18 +117,16 @@ app.route("/book").post(async (req, res) => {
     return x < 10 ? '0'+x : x
 }).reverse().join`/`;
 
-
 /*-----------------------------*/
     // make booking details obj
   let booking_details = {
-    id,
+    id:oid,
     ...req.body,
     ...req.files,
     booking_time: Date.now(),
     booking_date: formatDate,
   };
 /*-----------------------------*/
-
 
    // iterate through details object
   for (let i in booking_details) {
@@ -173,10 +177,10 @@ app.route("/book").post(async (req, res) => {
     // console.log("PULLED JSON DATA")
     // console.log(jsonFile);
 
-    // insert the owner
-    // storeOwner(jsonFile)
-    // await storePets(jsonFile)
-       storeBooking(jsonFile)
+    // store data
+    storeOwner(jsonFile)
+    await storePets(jsonFile)
+    storeBooking(jsonFile)
   // response in json format
   res.json(formattedObj);
 });
@@ -363,14 +367,13 @@ function validateProperties(input,compare){
 async function storePets(jsonFile){
 const petIdList = await getList('pets');
 console.log("STORE PETS - CHECK FILE!");
-const id = generateId()
 let payload = {}, abstract = {}
 jsonFile = (jsonFile[0]);
 const ownerId = jsonFile.id;
 
 for(let num in jsonFile){
     if(/[0-9]/g.test(num)){
-      console.log("NUM")
+      console.log("NUM") 
       console.log(num)
       let object = jsonFile[num]
       for(let prop in object){
@@ -398,7 +401,9 @@ for(let num in jsonFile){
       delete abstract['type']
 
       // add pid to payload
-      const pid = await generateId(petIdList);
+      let pid = await generateId(petIdList);
+          pid = prefix.pets + pid;
+
       payload['pid'] = pid;
       payload['owner'] = ownerId;
       create('pets',payload);
@@ -421,28 +426,32 @@ payload.email = jsonFile.email;
 create('owners',payload)
 }
 async function storeBooking(jsonFile){
+  jsonFile = (jsonFile[0]);
+  const {id,booking_time,booking_date} = jsonFile;
   console.log("STORE BOOKINGS")
     // method to store booking
-    // get Ids
-    const listOfPets = await read('pets');
-    const [row,info] = listOfPets;
-    const mapPets = row;
-    console.log(mapPets)
-    const {oid,booking_time,booking_date} = jsonFile;
+    const listOfBookings = await read('bookings') // read list of bookings
+    const listOfPets = await read('pets') // read list of pets
+
+
+    let bookingId = await generateId(listOfBookings);
+        bookingId = prefix.booking + bookingId;
+
+
+
+
+    // dress object with required fields
     const payload = {};
-    const petIds = [] // empty array of pet ids
+    payload['bid'] = bookingId;
+    payload['pets'] = JSON.stringify({kyle:"Stewart"}); // json data
+    payload['oid'] = id; // owner id
+    payload['booking_time'] = booking_time; // booking_time
+    payload['booking_date'] = '2025-08-19' // booking_date
+
+    create('bookings',payload)
+    console.log(payload);
     
-    // for(let num in jsonFile){
-    //   // console.log(jsonFile[num])
-    //     if (/[0-9]+$/g.test(num)) {
-    //        console.log("IDENTIFY PIDs of ANIMALS in BOOKIGN")
-    //        console.log(pid)
-    //        petIds.push(pid)
-    //     }
-    // } 
-    // stringify petIds
-    // const stringifiedPetIds = JSON.stringify(petIds);
-    // console.log(stringifiedPetIds)
+    // return
     return null;
 }
 function pullJsonData(directory,filename){

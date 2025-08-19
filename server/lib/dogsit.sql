@@ -1,8 +1,8 @@
--- MySQL dump 10.13  Distrib 9.3.0, for macos15.2 (arm64)
+-- MySQL dump 10.13  Distrib 9.1.0, for Win64 (x86_64)
 --
 -- Host: localhost    Database: dogsit
 -- ------------------------------------------------------
--- Server version	9.3.0
+-- Server version	8.0.43
 
 /*!40101 SET @OLD_CHARACTER_SET_CLIENT=@@CHARACTER_SET_CLIENT */;
 /*!40101 SET @OLD_CHARACTER_SET_RESULTS=@@CHARACTER_SET_RESULTS */;
@@ -24,12 +24,11 @@ DROP TABLE IF EXISTS `bookings`;
 /*!50503 SET character_set_client = utf8mb4 */;
 CREATE TABLE `bookings` (
   `bid` varchar(25) NOT NULL,
-  `pid` varchar(255) DEFAULT NULL,
-  `oid` bigint unsigned DEFAULT NULL,
+  `oid` varchar(25) DEFAULT NULL,
   `booking_time` time DEFAULT NULL,
   `booking_date` date DEFAULT NULL,
+  `pets` json DEFAULT NULL,
   UNIQUE KEY `bid` (`bid`),
-  KEY `pid` (`pid`),
   KEY `oid` (`oid`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
 /*!40101 SET character_set_client = @saved_cs_client */;
@@ -125,7 +124,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('Ezqo2Mopruwo58vsclW6hTc8JD0A8mwU',1755439668,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-17T14:07:32.008Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('Gp1OTS7E1kKaKiAoGBEFxAuUU0o9KYMC',1755437811,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-17T13:06:57.158Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('SkWccILnmluZhdw5F5HDxG2iIHxkLAp0',1755439548,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-17T13:36:59.152Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
+INSERT INTO `sessions` VALUES ('4h2cdk7mmpRfAmYk1LSRIhDABDpGp-T6',1755631378,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-19T19:08:28.798Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('YZ8WGq3bp67rDS11QbEZeitUQ9YI4L7q',1755630438,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-19T18:38:18.967Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -141,6 +140,27 @@ SET @saved_cs_client     = @@character_set_client;
  1 AS `table_name`,
  1 AS `Size in MB`*/;
 SET character_set_client = @saved_cs_client;
+
+--
+-- Table structure for table `test`
+--
+
+DROP TABLE IF EXISTS `test`;
+/*!40101 SET @saved_cs_client     = @@character_set_client */;
+/*!50503 SET character_set_client = utf8mb4 */;
+CREATE TABLE `test` (
+  `random` json DEFAULT NULL
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_0900_ai_ci;
+/*!40101 SET character_set_client = @saved_cs_client */;
+
+--
+-- Dumping data for table `test`
+--
+
+LOCK TABLES `test` WRITE;
+/*!40000 ALTER TABLE `test` DISABLE KEYS */;
+/*!40000 ALTER TABLE `test` ENABLE KEYS */;
+UNLOCK TABLES;
 
 --
 -- Final view structure for view `table_size_in_mb`
@@ -169,4 +189,4 @@ SET character_set_client = @saved_cs_client;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-17  9:58:19
+-- Dump completed on 2025-08-19 14:54:00
