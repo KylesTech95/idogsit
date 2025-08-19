@@ -25,7 +25,7 @@ DROP TABLE IF EXISTS `bookings`;
 CREATE TABLE `bookings` (
   `bid` varchar(25) NOT NULL,
   `oid` varchar(25) DEFAULT NULL,
-  `booking_time` time DEFAULT NULL,
+  `booking_time` varchar(33) DEFAULT NULL,
   `booking_date` date DEFAULT NULL,
   `pets` json DEFAULT NULL,
   UNIQUE KEY `bid` (`bid`),
@@ -39,6 +39,7 @@ CREATE TABLE `bookings` (
 
 LOCK TABLES `bookings` WRITE;
 /*!40000 ALTER TABLE `bookings` DISABLE KEYS */;
+INSERT INTO `bookings` VALUES ('SCH4dc9e96b','OWN66e8e29f','1755630980020','2025-08-19','{\"kyle\": \"Stewart\"}'),('SCHae4c1f45','OWN2b5e9023','1755631124603','2025-08-19','{\"kyle\": \"Stewart\"}');
 /*!40000 ALTER TABLE `bookings` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -66,6 +67,7 @@ CREATE TABLE `owners` (
 
 LOCK TABLES `owners` WRITE;
 /*!40000 ALTER TABLE `owners` DISABLE KEYS */;
+INSERT INTO `owners` VALUES ('OWN66e8e29f','marcus','dwight','9399494944','em@user.com'),('OWN2b5e9023','sal','sdddt','949494344','emsdd@user.com');
 /*!40000 ALTER TABLE `owners` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -100,6 +102,7 @@ CREATE TABLE `pets` (
 
 LOCK TABLES `pets` WRITE;
 /*!40000 ALTER TABLE `pets` DISABLE KEYS */;
+INSERT INTO `pets` VALUES ('PET2da838c1','asd',44,3,5,'asd','cm','cm','turtle','years','OWN2b5e9023'),('PET85bd77b5','ddd',3,1,3,'asd','cm','cm','dog','months','OWN66e8e29f');
 /*!40000 ALTER TABLE `pets` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -124,7 +127,7 @@ CREATE TABLE `sessions` (
 
 LOCK TABLES `sessions` WRITE;
 /*!40000 ALTER TABLE `sessions` DISABLE KEYS */;
-INSERT INTO `sessions` VALUES ('4h2cdk7mmpRfAmYk1LSRIhDABDpGp-T6',1755631378,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-19T19:08:28.798Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('YZ8WGq3bp67rDS11QbEZeitUQ9YI4L7q',1755630438,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-19T18:38:18.967Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
+INSERT INTO `sessions` VALUES ('1-oRpTNcNe69F7XynU4aE2vNzTqaqTfQ',1755632926,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-19T19:38:55.524Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('4h2cdk7mmpRfAmYk1LSRIhDABDpGp-T6',1755632280,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-19T19:08:28.798Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}'),('YZ8WGq3bp67rDS11QbEZeitUQ9YI4L7q',1755630438,'{\"cookie\":{\"originalMaxAge\":1800000,\"expires\":\"2025-08-19T18:38:18.967Z\",\"secure\":false,\"httpOnly\":true,\"path\":\"/\",\"sameSite\":\"strict\"}}');
 /*!40000 ALTER TABLE `sessions` ENABLE KEYS */;
 UNLOCK TABLES;
 
@@ -189,4 +192,4 @@ UNLOCK TABLES;
 /*!40101 SET COLLATION_CONNECTION=@OLD_COLLATION_CONNECTION */;
 /*!40111 SET SQL_NOTES=@OLD_SQL_NOTES */;
 
--- Dump completed on 2025-08-19 14:54:00
+-- Dump completed on 2025-08-19 15:20:28
