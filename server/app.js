@@ -178,9 +178,12 @@ app.route("/book").post(async (req, res) => {
     // console.log(jsonFile);
 
     // store data
-    storeOwner(jsonFile)
-    await storePets(jsonFile)
-    storeBooking(jsonFile)
+    if(storeOwner(jsonFile)){
+        if(await storePets(jsonFile)){
+            storeBooking(jsonFile)
+        }
+      }
+    
   // response in json format
   res.json(formattedObj);
 });
@@ -228,7 +231,7 @@ app.route("/breed/:animal").get(async (req, res) => {
 });
 
 // app.route('/rabbits/post').post((req,res)=>{
-//     console.log(req.body)
+    // console.log(req.body)
 //     const rabbitsDir = path.resolve(__dirname,'lib','rabbits.json')
 //     // write to file
 //     fs.writeFileSync(rabbitsDir,JSON.stringify(req.body),{encoding:'utf-8'})
@@ -268,8 +271,8 @@ async function uploadPet(req, res) {
   // for(let i = 0; i < objectFiles.length; i++){
   //     let current = files[objectFiles[i]];
   //     if(current){
-  //         console.log(current.name)
-  //         console.log(current.data)
+          // console.log(current.name)
+          // console.log(current.data)
   //     }
 
   //     fs.writeFileSync(path.resolve(__dirname,'output',current.name),current.data,'utf-8')
@@ -366,7 +369,7 @@ function validateProperties(input,compare){
 }
 async function storePets(jsonFile){
 const petIdList = await getList('pets');
-console.log("STORE PETS - CHECK FILE!");
+// console.log("STORE PETS - CHECK FILE!");
 let payload = {}, abstract = {}
 jsonFile = (jsonFile[0]);
 const ownerId = jsonFile.id;
@@ -409,6 +412,7 @@ for(let num in jsonFile){
       create('pets',payload);
     }
 }
+return true;
 }
 function storeOwner(jsonFile){
 jsonFile = (jsonFile[0]);
@@ -424,32 +428,48 @@ payload.email = jsonFile.email;
 
 // INSERT DATA INTO OWNERS TABLE
 create('owners',payload)
+return true;
 }
 async function storeBooking(jsonFile){
   jsonFile = (jsonFile[0]);
-  const {id,booking_time,booking_date} = jsonFile;
+  const { id, booking_time, booking_date } = jsonFile;
   console.log("STORE BOOKINGS")
     // method to store booking
     const listOfBookings = await read('bookings') // read list of bookings
     const listOfPets = await read('pets') // read list of pets
+    let list_pets = listOfPets[0]; // official dataset to work against
+
+    console.log("LIST OF PETS FROM TABLE")
+    console.log(list_pets)
+    let ownerId = jsonFile.id;
+    console.log("OWNER ID:")
+    console.log(ownerId)
+    console.log(" ")
+
+    let mypets = list_pets.filter(pet => pet.owner === ownerId);
+
+    console.log("PETS BY OWNER:")
+    console.log(mypets)
+  
 
 
+  //  generate the booking ID
     let bookingId = await generateId(listOfBookings);
         bookingId = prefix.booking + bookingId;
-
-
 
 
     // dress object with required fields
     const payload = {};
     payload['bid'] = bookingId;
-    payload['pets'] = JSON.stringify({kyle:"Stewart"}); // json data
+    payload['pets'] = JSON.stringify(mypets); // json data
     payload['oid'] = id; // owner id
     payload['booking_time'] = booking_time; // booking_time
-    payload['booking_date'] = '2025-08-19' // booking_date
+    let bookDate = booking_date.split`/`.join`-`.replace(/^([0-9]*)-([0-9]*)-([0-9]*)$/,'$1-$3-$2');
+    // console.log(bookDate)
+    payload['booking_date'] = bookDate // booking_date
 
     create('bookings',payload)
-    console.log(payload);
+    // console.log(payload);
     
     // return
     return null;
@@ -466,7 +486,7 @@ function pullJsonData(directory,filename){
 // async function updateMysqlCols(req,res,next){
 //   try{
 //     let response = await updatetablesCols(['pets','owners','bookings'])
-//     console.log(response)
+    // console.log(response)
 //     next();
 //   }
 //   catch(err){
@@ -488,10 +508,10 @@ function pullJsonData(directory,filename){
 
 //   // then
 //   const response = outter.then(value => {
-//     // console.log(value)
-//     console.log(value.information)
-//     console.log("\n")
-//     console.log(value.rows);
+    // // console.log(value)
+    // console.log(value.information)
+    // console.log("\n")
+    // console.log(value.rows);
 //     return value;
 //   })
 
