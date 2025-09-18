@@ -1,5 +1,5 @@
 // check tables
-fetch('/tables/check');
+// fetch('/tables/check');
 
 const [dogpaw, catpaw] = [...document.getElementById("paw-container").children];
 const navlistitems = document.querySelectorAll(".nav-list-item");
@@ -639,14 +639,14 @@ updateNavigator("gallery", "disable");
 // updateNavigator('home','disable')
 // updateNavigator('book','disable')
 
-console.log(
-  new Date(Date.now())
-    .toLocaleDateString()
-    .split("/")
-    .map((x) => {
-      x = Number(x);
-      return x < 10 ? "0" + x : x;
-    })
-    .reverse()
-    .join(".")
-);
+// console.log(
+//   new Date(Date.now())
+//     .toLocaleDateString()
+//     .split("/")
+//     .map((x) => {
+//       x = Number(x);
+//       return x < 10 ? "0" + x : x;
+//     })
+//     .reverse()
+//     .join(".")
+// );
